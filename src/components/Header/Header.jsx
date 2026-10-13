@@ -21,13 +21,15 @@ const Header = () => {
             <button className="header__btn-main-new _hover01" id="btnMainNew">
               <a href="#popNewCard">Создать новую задачу</a>
             </button>
-            <a
-              href="#user-set-target"
-              className="header__user _hover02"
+            <button
+              className="header__btn-main-new _hover01"
               onClick={() => setIsOpen(!isOpen)}
             >
-              Ivan Ivanov
-            </a>
+              <a href="#user-set-target" className="header__user _hover02">
+                Ivan Ivanov
+              </a>
+            </button>
+
             {isOpen && (
               <div
                 className="header__pop-user-set pop-user-set"
