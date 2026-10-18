@@ -1,5 +1,4 @@
-
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export const Wrapper = styled.div`
   width: 100%;
@@ -16,6 +15,18 @@ export const Container = styled.div`
   @media screen and (max-width: 495px) {
     padding: 0 16px;
   }
+`;
+
+export const cardAnimation = keyframes`
+ {
+      height: 0;
+      opacity: 0;
+    }
+
+    100% {
+      height: auto;
+      opacity: 1;
+    }
 `;
 
 export const Button = styled.button`

@@ -1,4 +1,3 @@
-
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
@@ -45,17 +44,6 @@ const GlobalStyles = createGlobalStyle`
   ol {
     list-style: none;
   }
-
-  @keyframes card-animation {
-    0% {
-      height: 0;
-      opacity: 0;
-    }
-
-    100% {
-      height: auto;
-      opacity: 1;
-    }
   }
 `;
 
