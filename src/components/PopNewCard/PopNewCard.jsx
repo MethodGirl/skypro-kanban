@@ -41,7 +41,7 @@ const PopNewCard = () => {
                   ></textarea>
                 </div>
               </form>
-              <Calendar />
+              <Calendar isCreating={true}/>
             </div>
             <div className="pop-new-card__categories categories">
               <p className="categories__p subttl">Категория</p>

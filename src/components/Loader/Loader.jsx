@@ -1,9 +1,7 @@
+import { Loader as LoaderWrapper } from "./Loader.styled.js";
+
 function Loader() {
-  return (
-    <p class = 'loader'>
-      Данные загружаются
-    </p>
-  )
+  return <LoaderWrapper>Данные загружаются</LoaderWrapper>;
 }
 
-export default Loader
+export default Loader;

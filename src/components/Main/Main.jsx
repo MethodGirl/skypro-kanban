@@ -2,6 +2,9 @@ import Column from "../Column/Column";
 import { useState } from "react";
 import { useEffect } from "react";
 import Loader from "../Loader/Loader";
+import { Main as MainWrapper, MainBlock, MainContent } from "./Main.styled.js";
+import { Container } from "../../styles/Common.styled.js";
+import GlobalStyles from "../../styles/GlobalStyles.js";
 
 const Main = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -13,23 +16,26 @@ const Main = () => {
   }, []);
 
   return (
-    <main className="main">
-      <div className="container">
-        <div className="main__block">
-          {isLoading ? (
-            <Loader />
-          ) : (
-            <div className="main__content">
-              <Column condition="Без статуса" />
-              <Column condition="Нужно сделать" />
-              <Column condition="В работе" />
-              <Column condition="Тестирование" />
-              <Column condition="Готово" />
-            </div>
-          )}
-        </div>
-      </div>
-    </main>
+    <>
+      <GlobalStyles />
+      <MainWrapper>
+        <Container>
+          <MainBlock>
+            {isLoading ? (
+              <Loader />
+            ) : (
+              <MainContent>
+                <Column condition="Без статуса" />
+                <Column condition="Нужно сделать" />
+                <Column condition="В работе" />
+                <Column condition="Тестирование" />
+                <Column condition="Готово" />
+              </MainContent>
+            )}
+          </MainBlock>
+        </Container>
+      </MainWrapper>
+    </>
   );
 };
 
