@@ -6,6 +6,7 @@ import {
   Container,
   HeaderBlock,
   HeaderNav,
+  HeaderPopUserSet,
   LogoDark,
   LogoLight,
   CreateTaskButton,
@@ -13,7 +14,6 @@ import {
 } from "./Header.styled.js";
 import { Hover03 } from "../../styles/Common.styled.js";
 import {
-  PopUserSet,
   PopUserSetMail,
   PopUserSetName,
   PopUserSetTheme,
@@ -43,7 +43,7 @@ const Header = () => {
               <a href="#user-set-target">Ivan Ivanov</a>
             </UserButton>
             {isOpen && (
-              <PopUserSet id="user-set-target">
+              <HeaderPopUserSet id="user-set-target">
                 <a href="">x</a>
                 <PopUserSetName> Ivan Ivanov</PopUserSetName>
                 <PopUserSetMail>ivan.ivanov@gmail.com</PopUserSetMail>
@@ -54,7 +54,7 @@ const Header = () => {
                 <Hover03 type="button">
                   <a href="#popExit">Выйти</a>
                 </Hover03>
-              </PopUserSet>
+              </HeaderPopUserSet>
             )}
           </HeaderNav>
         </HeaderBlock>
