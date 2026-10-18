@@ -1,15 +1,16 @@
 import Card from "../Card/Card";
 import { tasks } from "../../tasks";
+import { MainColumn, ColumnTitle, Cards } from "./Column.styled.js";
 
 const Column = (props) => {
   const { condition } = props;
 
   return (
-    <div className="main__column column">
-      <div className="column__title">
+    <MainColumn>
+      <ColumnTitle>
         <p>{condition}</p>
-      </div>
-      <div className="cards">
+      </ColumnTitle>
+      <Cards>
         {tasks
           .filter((task) => {
             return task.status === condition;
@@ -23,8 +24,8 @@ const Column = (props) => {
               topic={task.topic}
             />
           ))}
-      </div>
-    </div>
+      </Cards>
+    </MainColumn>
   );
 };
 
