@@ -10,9 +10,9 @@ import {
 } from "./Card.styled.js";
 
 const Card = (props) => {
-  const { topic, title, date } = props;
+  const { topic, title, date, onClick } = props;
   return (
-    <CardsItem>
+    <CardsItem onClick={onClick}>
       <CardsCard>
         <CardGroup>
           <CardTheme $topic={topic}>
@@ -27,9 +27,7 @@ const Card = (props) => {
           </a>
         </CardGroup>
         <CardContent>
-          <a href="" target="_blank">
-            <CardTitle>{title}</CardTitle>
-          </a>
+          <CardTitle>{title}</CardTitle>
           <CardDate>
             <svg
               xmlns="http://www.w3.org/2000/svg"

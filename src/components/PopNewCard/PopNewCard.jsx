@@ -1,15 +1,22 @@
 import Calendar from "../Calendar/Calendar";
 
-const PopNewCard = () => {
+const PopNewCard = ({ onClose }) => {
   return (
-    <div className="pop-new-card" id="popNewCard">
-      <div className="pop-new-card__container">
+    <div className="pop-new-card" id="popNewCard" onClick={onClose}>
+      <div
+        className="pop-new-card__container"
+        onClick={(event) => event.stopPropagation()}
+      >
         <div className="pop-new-card__block">
           <div className="pop-new-card__content">
             <h3 className="pop-new-card__ttl">Создание задачи</h3>
-            <a href="#" className="pop-new-card__close">
+            <button
+              type="button"
+              className="pop-new-card__close"
+              onClick={onClose}
+            >
               &#10006;
-            </a>
+            </button>
             <div className="pop-new-card__wrap">
               <form
                 className="pop-new-card__form form-new"
@@ -41,7 +48,7 @@ const PopNewCard = () => {
                   ></textarea>
                 </div>
               </form>
-              <Calendar isCreating={true}/>
+              <Calendar isCreating={true} />
             </div>
             <div className="pop-new-card__categories categories">
               <p className="categories__p subttl">Категория</p>

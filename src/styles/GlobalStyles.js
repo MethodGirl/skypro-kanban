@@ -23,6 +23,8 @@ const GlobalStyles = createGlobalStyle`
     font-family: "Roboto", Arial, Helvetica, sans-serif;
     color: #000000;
     background-color: #EAEEF6;
+    margin: 0;
+    padding: 0
   }
 
   a {

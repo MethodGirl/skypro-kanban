@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Hover01, Hover03 } from "../../styles/Common.styled";
 
 export const PopExit = styled.div`
-  display: none;
+  display: block;
   width: 100%;
   height: 100%;
   min-width: 320px;
@@ -11,10 +11,6 @@ export const PopExit = styled.div`
   top: 0;
   left: 0;
   z-index: 5;
-
-  &:target {
-    display: block;
-  }
 `;
 
 export const PopExitContainer = styled.div`
@@ -75,14 +71,6 @@ export const PopExitYes = styled(Hover01)`
   color: #ffffff;
   margin-right: 10px;
 
-  a {
-    width: 100%;
-    height: 100%;
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
 
   @media only screen and (max-width: 375px) {
     & {
@@ -108,16 +96,8 @@ export const PopExitNo = styled(Hover03)`
   line-height: 21px;
   font-weight: 500;
   letter-spacing: -0.14px;
-  color: #ffffff;
+  color: #565EEF;
 
-  a {
-    width: 100%;
-    height: 100%;
-    color: #565eef;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
 
   @media only screen and (max-width: 375px) {
     & {

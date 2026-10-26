@@ -13,14 +13,21 @@ import {
   UserButton,
 } from "./Header.styled.js";
 import { Hover03 } from "../../styles/Common.styled.js";
+import ExitPage from "../../pages/ExitPage.jsx";
 import {
   PopUserSetMail,
   PopUserSetName,
   PopUserSetTheme,
 } from "./PopUserSet.styled.js";
+import { useNavigate } from "react-router-dom";
+import PopNewCard from "../PopNewCard/PopNewCard.jsx";
 
-const Header = () => {
+const Header = ({ setIsAuth }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isExitOpen, setIsExitOpen] = useState(false);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const navigate = useNavigate();
+
   return (
     <HeaderWrapper>
       <Container>
@@ -36,8 +43,11 @@ const Header = () => {
             </a>
           </LogoDark>
           <HeaderNav>
-            <CreateTaskButton id="btnMainNew">
-              <a href="#popNewCard">Создать новую задачу</a>
+            <CreateTaskButton
+              id="btnMainNew"
+              onClick={() => setIsCreateOpen(true)}
+            >
+              Создать новую задачу
             </CreateTaskButton>
             <UserButton onClick={() => setIsOpen(!isOpen)}>
               <a href="#user-set-target">Ivan Ivanov</a>
@@ -51,14 +61,22 @@ const Header = () => {
                   <p>Темная тема</p>
                   <input type="checkbox" className="checkbox" name="checkbox" />
                 </PopUserSetTheme>
-                <Hover03 type="button">
-                  <a href="#popExit">Выйти</a>
+                <Hover03
+                  type="button"
+                  onClick={() => {
+                    setIsExitOpen(true);
+                    navigate("/exit");
+                  }}
+                >
+                  Выйти
                 </Hover03>
               </HeaderPopUserSet>
             )}
           </HeaderNav>
         </HeaderBlock>
       </Container>
+      {isCreateOpen && <PopNewCard onClose={() => setIsCreateOpen(false)} />}
+      {isExitOpen && <ExitPage setIsAuth={setIsAuth} />}
     </HeaderWrapper>
   );
 };
