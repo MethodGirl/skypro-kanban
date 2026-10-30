@@ -1,21 +1,30 @@
 import Card from "../Card/Card";
 import { tasks } from "../../tasks";
+import { MainColumn, ColumnTitle, Cards } from "./Column.styled.js";
+import { useNavigate } from "react-router-dom";
 
 const Column = (props) => {
   const { condition } = props;
+  const navigate = useNavigate();
+
+  const handleShowCard = (id) => {
+  console.log("ID карточки:", id);
+  navigate(`/card/${id}`);
+};
 
   return (
-    <div className="main__column column">
-      <div className="column__title">
+    <MainColumn>
+      <ColumnTitle>
         <p>{condition}</p>
-      </div>
-      <div className="cards">
+      </ColumnTitle>
+      <Cards>
         {tasks
           .filter((task) => {
             return task.status === condition;
           })
           .map((task) => (
             <Card
+              onClick={() => handleShowCard(task.id)}
               key={task.id}
               id={task.id}
               title={task.title}
@@ -23,8 +32,8 @@ const Column = (props) => {
               topic={task.topic}
             />
           ))}
-      </div>
-    </div>
+      </Cards>
+    </MainColumn>
   );
 };
 

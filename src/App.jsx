@@ -1,20 +1,36 @@
 import "./styles/style.css";
-import Header from "./components/Header/Header";
-import Main from "./components/Main/Main";
-import PopBrowse from "./components/PopBrowse/PopBrowse";
-import PopExit from "./components/PopExit/PopExit";
-import PopNewCard from "./components/PopNewCard/PopNewCard";
+import { Routes, Route } from "react-router-dom";
+import BoardPage from "./pages/BoardPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import GlobalStyles from "./styles/GlobalStyles";
+import ExitPage from "./pages/ExitPage";
+import { useState } from "react";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import CardPage from "./pages/CardPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
+  const [isAuth, setIsAuth] = useState(
+    sessionStorage.getItem("isAuth") === "true",
+  );
+
   return (
     <>
-      <div className="wrapper">
-        <PopExit />
-        <PopNewCard />
-        <PopBrowse />
-        <Header />
-        <Main />
-      </div>
+      <GlobalStyles />
+
+      <Routes>
+        <Route element={<PrivateRoute isAuth={isAuth} />}>
+          <Route path="/" element={<BoardPage setIsAuth={setIsAuth} />}>
+            <Route path="card/:id" element={<CardPage />} />
+          </Route>
+          <Route path="/exit" element={<ExitPage setIsAuth={setIsAuth} />} />
+        </Route>
+
+        <Route path="/login" element={<LoginPage setIsAuth={setIsAuth} />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
     </>
   );
 }

@@ -1,56 +1,84 @@
-import logo from "../../../public/logo.png";
+import lightLogo from "../../../public/logo.png";
+import darkLogo from "../../../public/logo_dark.png";
 import { useState } from "react";
+import {
+  Header as HeaderWrapper,
+  Container,
+  HeaderBlock,
+  HeaderNav,
+  HeaderPopUserSet,
+  LogoDark,
+  LogoLight,
+  CreateTaskButton,
+  UserButton,
+} from "./Header.styled.js";
+import { Hover03 } from "../../styles/Common.styled.js";
+import ExitPage from "../../pages/ExitPage.jsx";
+import {
+  PopUserSetMail,
+  PopUserSetName,
+  PopUserSetTheme,
+} from "./PopUserSet.styled.js";
+import { useNavigate } from "react-router-dom";
+import PopNewCard from "../PopNewCard/PopNewCard.jsx";
+import { Link } from "react-router-dom";
 
-const Header = () => {
+const Header = ({ setIsAuth }) => {
   const [isOpen, setIsOpen] = useState(false);
-  return (
-    <header className="header">
-      <div className="container">
-        <div className="header__block">
-          <div className="header__logo _show _light">
-            <a href="" target="_self">
-              <img src={logo} alt="logo" />
-            </a>
-          </div>
-          <div className="header__logo _dark">
-            <a href="" target="_self">
-              <img src="images/logo_dark.png" alt="logo" />
-            </a>
-          </div>
-          <nav className="header__nav">
-            <button className="header__btn-main-new _hover01" id="btnMainNew">
-              <a href="#popNewCard">Создать новую задачу</a>
-            </button>
-            <button
-              className="header__btn-main-new _hover01"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              <a href="#user-set-target" className="header__user _hover02">
-                Ivan Ivanov
-              </a>
-            </button>
+  const [isExitOpen, setIsExitOpen] = useState(false);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const navigate = useNavigate();
 
+  return (
+    <HeaderWrapper>
+      <Container>
+        <HeaderBlock>
+          <LogoLight>
+            <Link to="/">
+              <img src={lightLogo} alt="На главную" />
+            </Link>
+          </LogoLight>
+
+          <LogoDark>
+            <Link to="/">
+              <img src={darkLogo} alt="На главную" />
+            </Link>
+          </LogoDark>
+          <HeaderNav>
+            <CreateTaskButton
+              id="btnMainNew"
+              onClick={() => setIsCreateOpen(true)}
+            >
+              Создать новую задачу
+            </CreateTaskButton>
+            <UserButton onClick={() => setIsOpen(!isOpen)}>
+              <a>Ivan Ivanov</a>
+            </UserButton>
             {isOpen && (
-              <div
-                className="header__pop-user-set pop-user-set"
-                id="user-set-target"
-              >
-                <a href="">x</a>
-                <p className="pop-user-set__name">Ivan Ivanov</p>
-                <p className="pop-user-set__mail">ivan.ivanov@gmail.com</p>
-                <div className="pop-user-set__theme">
+              <HeaderPopUserSet id="user-set-target">
+                <PopUserSetName> Ivan Ivanov</PopUserSetName>
+                <PopUserSetMail>ivan.ivanov@gmail.com</PopUserSetMail>
+                <PopUserSetTheme>
                   <p>Темная тема</p>
                   <input type="checkbox" className="checkbox" name="checkbox" />
-                </div>
-                <button type="button" className="_hover03">
-                  <a href="#popExit">Выйти</a>
-                </button>
-              </div>
+                </PopUserSetTheme>
+                <Hover03
+                  type="button"
+                  onClick={() => {
+                    setIsExitOpen(true);
+                    navigate("/exit");
+                  }}
+                >
+                  Выйти
+                </Hover03>
+              </HeaderPopUserSet>
             )}
-          </nav>
-        </div>
-      </div>
-    </header>
+          </HeaderNav>
+        </HeaderBlock>
+      </Container>
+      {isCreateOpen && <PopNewCard onClose={() => setIsCreateOpen(false)} />}
+      {isExitOpen && <ExitPage setIsAuth={setIsAuth} />}
+    </HeaderWrapper>
   );
 };
 
