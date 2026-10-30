@@ -6,11 +6,12 @@ import {
   CardTheme,
   CardContent,
   CardDate,
-  CardTitle
+  CardTitle,
 } from "./Card.styled.js";
 
 const Card = (props) => {
   const { topic, title, date, onClick } = props;
+
   return (
     <CardsItem onClick={onClick}>
       <CardsCard>
@@ -18,16 +19,23 @@ const Card = (props) => {
           <CardTheme $topic={topic}>
             <p>{topic}</p>
           </CardTheme>
-          <a href="#popBrowse" target="_self">
-            <CardButton>
-              <div></div>
-              <div></div>
-              <div></div>
-            </CardButton>
-          </a>
+
+          <CardButton
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              onClick();
+            }}
+          >
+            <div></div>
+            <div></div>
+            <div></div>
+          </CardButton>
         </CardGroup>
+
         <CardContent>
           <CardTitle>{title}</CardTitle>
+
           <CardDate>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -57,6 +65,7 @@ const Card = (props) => {
                 </clipPath>
               </defs>
             </svg>
+
             <p>{date}</p>
           </CardDate>
         </CardContent>

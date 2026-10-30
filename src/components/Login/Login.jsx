@@ -17,6 +17,8 @@ const Login = ({ setIsAuth }) => {
   const handleLogin = (e) => {
     e.preventDefault();
     setIsAuth(true);
+    sessionStorage.setItem("isAuth", "true");
+
     navigate("/");
   };
 

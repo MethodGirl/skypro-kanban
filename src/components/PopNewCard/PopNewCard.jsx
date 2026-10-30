@@ -2,7 +2,7 @@ import Calendar from "../Calendar/Calendar";
 
 const PopNewCard = ({ onClose }) => {
   return (
-    <div className="pop-new-card" id="popNewCard" onClick={onClose}>
+    <div className="pop-new-card" onClick={onClose}>
       <div
         className="pop-new-card__container"
         onClick={(event) => event.stopPropagation()}
@@ -21,7 +21,7 @@ const PopNewCard = ({ onClose }) => {
               <form
                 className="pop-new-card__form form-new"
                 id="formNewCard"
-                action="#"
+                onSubmit={(event) => event.preventDefault()}
               >
                 <div className="form-new__block">
                   <label htmlFor="formTitle" className="subttl">
@@ -64,7 +64,11 @@ const PopNewCard = ({ onClose }) => {
                 </div>
               </div>
             </div>
-            <button className="form-new__create _hover01" id="btnCreate">
+            <button
+              type="submit"
+              className="form-new__create _hover01"
+              id="btnCreate"
+            >
               Создать задачу
             </button>
           </div>

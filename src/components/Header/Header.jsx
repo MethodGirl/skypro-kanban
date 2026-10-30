@@ -21,6 +21,7 @@ import {
 } from "./PopUserSet.styled.js";
 import { useNavigate } from "react-router-dom";
 import PopNewCard from "../PopNewCard/PopNewCard.jsx";
+import { Link } from "react-router-dom";
 
 const Header = ({ setIsAuth }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,14 +34,15 @@ const Header = ({ setIsAuth }) => {
       <Container>
         <HeaderBlock>
           <LogoLight>
-            <a href="" target="_self">
-              <img src={lightLogo} alt="logo" />
-            </a>
+            <Link to="/">
+              <img src={lightLogo} alt="На главную" />
+            </Link>
           </LogoLight>
+
           <LogoDark>
-            <a href="" target="_self">
-              <img src={darkLogo} alt="logo" />
-            </a>
+            <Link to="/">
+              <img src={darkLogo} alt="На главную" />
+            </Link>
           </LogoDark>
           <HeaderNav>
             <CreateTaskButton
@@ -50,11 +52,10 @@ const Header = ({ setIsAuth }) => {
               Создать новую задачу
             </CreateTaskButton>
             <UserButton onClick={() => setIsOpen(!isOpen)}>
-              <a href="#user-set-target">Ivan Ivanov</a>
+              <a>Ivan Ivanov</a>
             </UserButton>
             {isOpen && (
               <HeaderPopUserSet id="user-set-target">
-                <a href="">x</a>
                 <PopUserSetName> Ivan Ivanov</PopUserSetName>
                 <PopUserSetMail>ivan.ivanov@gmail.com</PopUserSetMail>
                 <PopUserSetTheme>

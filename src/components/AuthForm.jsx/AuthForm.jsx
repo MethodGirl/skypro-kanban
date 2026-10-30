@@ -15,10 +15,11 @@ import { Link, useNavigate } from "react-router-dom";
 
 const AuthForm = ({ isLogin, setIsAuth }) => {
   const navigate = useNavigate();
-
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     setIsAuth(true);
+    sessionStorage.setItem("isAuth", "true");
     navigate("/");
   };
 

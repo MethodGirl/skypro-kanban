@@ -9,12 +9,15 @@ import {
 } from "./PopExit.styled";
 import { useNavigate } from "react-router-dom";
 
-const PopExit = ({ setIsAuth}) => {
+const PopExit = ({ setIsAuth }) => {
   const navigate = useNavigate();
 
   const handleExit = (e) => {
     e.preventDefault();
+
     setIsAuth(false);
+    sessionStorage.removeItem("isAuth");
+
     navigate("/login");
   };
 

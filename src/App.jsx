@@ -11,7 +11,9 @@ import CardPage from "./pages/CardPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(
+    sessionStorage.getItem("isAuth") === "true",
+  );
 
   return (
     <>
