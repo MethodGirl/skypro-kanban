@@ -23,7 +23,7 @@ import { useNavigate } from "react-router-dom";
 import PopNewCard from "../PopNewCard/PopNewCard.jsx";
 import { Link } from "react-router-dom";
 
-const Header = ({ setIsAuth }) => {
+const Header = ({ setIsAuth, onTaskAdded, token }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isExitOpen, setIsExitOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -76,7 +76,13 @@ const Header = ({ setIsAuth }) => {
           </HeaderNav>
         </HeaderBlock>
       </Container>
-      {isCreateOpen && <PopNewCard onClose={() => setIsCreateOpen(false)} />}
+      {isCreateOpen && (
+        <PopNewCard
+          onClose={() => setIsCreateOpen(false)}
+          onTaskAdded={onTaskAdded}
+          token={token}
+        />
+      )}
       {isExitOpen && <ExitPage setIsAuth={setIsAuth} />}
     </HeaderWrapper>
   );

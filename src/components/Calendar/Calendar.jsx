@@ -14,16 +14,86 @@ import {
   NavActions,
   NavAction,
 } from "./Calendar.styled";
+import { useState } from "react";
 
-const Calendar = ({ isCreating }) => {
+const Calendar = ({ isCreating, date, onDateChange, isEditable  }) => {
+  const formattedDate = date
+    ? new Date(date).toLocaleDateString("ru-RU", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit",
+      })
+    : "";
+
+  const today = new Date();
+
+  const [currentMonth, setCurrentMonth] = useState(
+    new Date(today.getFullYear(), today.getMonth(), 1),
+  );
+
+  const [selectedDate, setSelectedDate] = useState(today);
+  const [isDateSelected, setIsDateSelected] = useState(false);
+
+  const handlePrevMonth = () => {
+    setCurrentMonth(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1),
+    );
+  };
+
+  const handleNextMonth = () => {
+    setCurrentMonth(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1),
+    );
+  };
+
+  const year = currentMonth.getFullYear();
+  const month = currentMonth.getMonth();
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  const firstDay = new Date(year, month, 1).getDay();
+
+  const startDay = firstDay === 0 ? 6 : firstDay - 1;
+
+  const days = Array.from({ length: daysInMonth }, (_, index) => index + 1);
+
+  const emptyDays = Array(startDay).fill(null);
+  const calendarDays = emptyDays.concat(days);
+
+  const allCalendarDays = calendarDays;
+
+  const handleSelectDate = (day) => {
+    const newDate = new Date(year, month, day);
+
+    setSelectedDate(newDate);
+    setIsDateSelected(true);
+    onDateChange?.(newDate.toISOString());
+  };
+
+  const selectedDateFormatted = selectedDate.toLocaleDateString("ru-RU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "2-digit",
+  });
+
   return (
     <CalendarWrapper>
       <CalendarTtl>Даты</CalendarTtl>
       <CalendarBlock>
         <CalendarNav>
-          <CalendarMonth>Сентябрь 2023</CalendarMonth>
+          <CalendarMonth>
+            {" "}
+            {currentMonth.toLocaleDateString("ru-RU", {
+              month: "long",
+              year: "numeric",
+            })}
+          </CalendarMonth>
           <NavActions>
-            <NavAction data-action="prev">
+            <NavAction
+              data-action="prev"
+              type="button"
+              onClick={handlePrevMonth}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="6"
@@ -34,7 +104,11 @@ const Calendar = ({ isCreating }) => {
               </svg>
             </NavAction>
 
-            <NavAction data-action="next">
+            <NavAction
+              data-action="next"
+              type="button"
+              onClick={handleNextMonth}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="6"
@@ -57,77 +131,39 @@ const Calendar = ({ isCreating }) => {
             <CalendarDayName $weekend>вс</CalendarDayName>
           </CalendarDaysNames>
           <CalendarCells>
-            <CalendarCell $otherMonth>28</CalendarCell>
-            <CalendarCell $otherMonth>29</CalendarCell>
-            <CalendarCell $otherMonth>30</CalendarCell>
-            <CalendarCell $cellday>31</CalendarCell>
-            <CalendarCell $cellday>1</CalendarCell>
-            <CalendarCell $cellday $weekend>
-              2
-            </CalendarCell>
-            <CalendarCell $cellday $weekend>
-              3
-            </CalendarCell>
-            <CalendarCell $cellday>4</CalendarCell>
-            <CalendarCell $cellday>5</CalendarCell>
-            <CalendarCell $cellday>6</CalendarCell>
-            <CalendarCell $cellday>7</CalendarCell>
-            <CalendarCell $cellday $current={isCreating}>
-              8
-            </CalendarCell>
-            <CalendarCell
-              $cellday
-              $weekend
-              $active={!isCreating}
-            >
-              9
-            </CalendarCell>
-            <CalendarCell $cellday $weekend>
-              10
-            </CalendarCell>
-            <CalendarCell $cellday>11</CalendarCell>
-            <CalendarCell $cellday>12</CalendarCell>
-            <CalendarCell $cellday>13</CalendarCell>
-            <CalendarCell $cellday>14</CalendarCell>
-            <CalendarCell $cellday>15</CalendarCell>
-            <CalendarCell $cellday $weekend>
-              16
-            </CalendarCell>
-            <CalendarCell $cellday $weekend>
-              17
-            </CalendarCell>
-            <CalendarCell $cellday>18</CalendarCell>
-            <CalendarCell $cellday>19</CalendarCell>
-            <CalendarCell $cellday>20</CalendarCell>
-            <CalendarCell $cellday>21</CalendarCell>
-            <CalendarCell $cellday>22</CalendarCell>
-            <CalendarCell $cellday $weekend>
-              23
-            </CalendarCell>
-            <CalendarCell $cellday $weekend>
-              24
-            </CalendarCell>
-            <CalendarCell $cellday>25</CalendarCell>
-            <CalendarCell $cellday>26</CalendarCell>
-            <CalendarCell $cellday>27</CalendarCell>
-            <CalendarCell $cellday>28</CalendarCell>
-            <CalendarCell $cellday>29</CalendarCell>
-            <CalendarCell $cellday $weekend>
-              30
-            </CalendarCell>
-            <CalendarCell $otherMonth $weekend>
-              1
-            </CalendarCell>
+            {allCalendarDays.map((day, index) =>
+              day === null ? (
+                <CalendarCell key={index} />
+              ) : (
+                <CalendarCell
+                  key={index}
+                  $activeday={
+                    selectedDate.getDate() === day &&
+                    selectedDate.getMonth() === month &&
+                    selectedDate.getFullYear() === year
+                  }
+                  $cellday
+                  onClick={() => handleSelectDate(day)}
+                >
+                  {day}
+                </CalendarCell>
+              ),
+            )}
           </CalendarCells>
         </CalendarContent>
-        <input type="hidden" id="datepick_value" value="08.09.2023" />
         <CalendarPeriod>
           <CalendarP>
-            {isCreating ? (
-              "Выберите срок исполнения"
+            {isCreating || isEditable  ? (
+              isDateSelected ? (
+                <>
+                  Срок исполнения: <span>{selectedDateFormatted}</span>
+                </>
+              ) : (
+                "Выберите срок исполнения"
+              )
             ) : (
               <>
-                Срок исполнения: <span>09.09.23</span>
+                Срок исполнения: <span>{formattedDate}</span>
               </>
             )}
           </CalendarP>

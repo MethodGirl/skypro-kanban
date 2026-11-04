@@ -1,16 +1,14 @@
 import Card from "../Card/Card";
-import { tasks } from "../../tasks";
 import { MainColumn, ColumnTitle, Cards } from "./Column.styled.js";
 import { useNavigate } from "react-router-dom";
 
 const Column = (props) => {
-  const { condition } = props;
+  const { condition, tasks } = props;
   const navigate = useNavigate();
 
   const handleShowCard = (id) => {
-  console.log("ID карточки:", id);
-  navigate(`/card/${id}`);
-};
+    navigate(`/card/${id}`);
+  };
 
   return (
     <MainColumn>
@@ -24,9 +22,9 @@ const Column = (props) => {
           })
           .map((task) => (
             <Card
-              onClick={() => handleShowCard(task.id)}
-              key={task.id}
-              id={task.id}
+              onClick={() => handleShowCard(task._id)}
+              key={task._id}
+              id={task._id}
               title={task.title}
               date={task.date}
               topic={task.topic}
