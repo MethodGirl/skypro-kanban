@@ -19,6 +19,12 @@ export const ModalBtnSignupEnt = styled(Hover01)`
   letter-spacing: -0.14px;
   color: #ffffff;
 
+  ${({ $error }) =>
+    $error &&
+    `
+background-color: #94A6BE;
+`}
+
   @media screen and (max-width: 375px) {
     & {
       height: 40px;

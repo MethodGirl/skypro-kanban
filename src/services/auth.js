@@ -9,7 +9,9 @@ export async function getUsersList() {
         "Content-Type": "",
       },
     });
+        console.log(data.data.users)
     return data.data.users;
+
   } catch (error) {
     throw new Error(error.response?.data?.error || error.message, {
       cause: error,
