@@ -7,6 +7,7 @@ export async function fetchTasks({ token }) {
     const data = await axios.get(API_URL, {
       headers: {
         Authorization: "Bearer " + token,
+        "Content-Type": "",
       },
     });
     return data.data;

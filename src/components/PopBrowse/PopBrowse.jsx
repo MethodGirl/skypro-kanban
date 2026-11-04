@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Calendar from "../Calendar/Calendar";
 import Loader from "../Loader/Loader";
-import { putTask, deleteTask} from "../../services/api";
+import { putTask, deleteTask } from "../../services/api";
 import { useState } from "react";
 
 const PopBrowse = ({ task, token, onTaskUpdated }) => {
@@ -112,9 +112,9 @@ const PopBrowse = ({ task, token, onTaskUpdated }) => {
 
     await deleteTask({ id: task._id, token });
 
-   await onTaskUpdated();
+    await onTaskUpdated();
 
-    navigate("/")
+    navigate("/");
   };
 
   return (
@@ -228,7 +228,7 @@ const PopBrowse = ({ task, token, onTaskUpdated }) => {
 
               <Calendar
                 date={isEditing ? formData.date : task.date}
-                isEditable={true}
+                isEditable={isEditing}
               />
             </div>
 
