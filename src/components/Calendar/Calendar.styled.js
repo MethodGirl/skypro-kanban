@@ -39,6 +39,7 @@ export const CalendarP = styled.p`
   color: #94a6be;
   font-size: 10px;
   line-height: 1;
+  margin-bottom: 7px
 
   span {
     color: #000000;
@@ -91,7 +92,6 @@ export const CalendarDayName = styled.div`
 
 export const CalendarCells = styled.div`
   width: 182px;
-  height: 126px;
   display: flex;
   flex-wrap: wrap;
 

@@ -12,6 +12,12 @@ import {
 const Card = (props) => {
   const { topic, title, date, onClick } = props;
 
+  const formattedDate = new Date(date).toLocaleDateString("ru-RU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "2-digit",
+  });
+
   return (
     <CardsItem onClick={onClick}>
       <CardsCard>
@@ -66,7 +72,7 @@ const Card = (props) => {
               </defs>
             </svg>
 
-            <p>{date}</p>
+            <p>{formattedDate}</p>
           </CardDate>
         </CardContent>
       </CardsCard>

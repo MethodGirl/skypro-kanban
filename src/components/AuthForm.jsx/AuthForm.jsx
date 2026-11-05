@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Wrapper as AuthWrapper,
   ContainerSignIn,
@@ -10,17 +11,112 @@ import {
   ModalBtnEnter,
 } from "../Login/Login.styled.js";
 
+import { signIn, signUp } from "../../services/auth.js";
 import { ModalBtnSignupEnt } from "../SignUp/SignUp.styled.js";
 import { Link, useNavigate } from "react-router-dom";
+import { ErrorEl } from "./Error.styled.js";
 
 const AuthForm = ({ isLogin, setIsAuth }) => {
   const navigate = useNavigate();
-  
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setIsAuth(true);
-    sessionStorage.setItem("isAuth", "true");
-    navigate("/");
+
+  const [formData, setFormData] = useState({
+    name: "",
+    login: "",
+    password: "",
+  });
+
+  const [errors, setErrors] = useState({
+    name: false,
+    login: false,
+    password: false,
+  });
+
+  const [error, setError] = useState("");
+
+  const validateForm = () => {
+    const newErrors = { name: "", password: "", login: "" };
+    let isValid = true;
+
+    if (!isLogin && formData.name.trim().length < 3) {
+      newErrors.name = true;
+      isValid = false;
+
+      setError(
+        "Введенные вами данные не корректны. Чтобы завершить регистрацию, введите данные корректно и повторите попытку.",
+      );
+    }
+
+    if (!formData.login.trim() || formData.login.trim().length < 3) {
+      newErrors.login = true;
+      isValid = false;
+
+      if (isLogin) {
+        setError(
+          "Введенные вами данные не распознаны. Проверьте свой логин и пароль и повторите попытку входа.",
+        );
+      } else {
+        setError(
+          "Введенные вами данные не корректны. Чтобы завершить регистрацию, введите данные корректно и повторите попытку.",
+        );
+      }
+    }
+
+    if (!formData.password.trim() || formData.password.trim().length < 3) {
+      newErrors.password = true;
+      isValid = false;
+
+      if (isLogin) {
+        setError(
+          "Введенные вами данные не распознаны. Проверьте свой логин и пароль и повторите попытку входа.",
+        );
+      } else {
+        setError(
+          "Введенные вами данные не корректны. Чтобы завершить регистрацию, введите данные корректно и повторите попытку.",
+        );
+      }
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    setErrors({ ...errors, [name]: false });
+    setError("");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      const data = isLogin
+        ? await signIn({ login: formData.login, password: formData.password })
+        : await signUp(formData);
+
+      if (data) {
+        setIsAuth(true);
+        sessionStorage.setItem("userInfo", JSON.stringify(data));
+        navigate("/");
+      }
+    } catch {
+      if (isLogin) {
+        setError(
+          "Введенные вами данные не распознаны. Проверьте свой логин и пароль и повторите попытку входа.",
+        );
+      } else {
+        setError(
+          "Введенные вами данные не корректны. Чтобы завершить регистрацию, введите данные корректно и повторите попытку.",
+        );
+      }
+    }
   };
 
   return (
@@ -34,30 +130,40 @@ const AuthForm = ({ isLogin, setIsAuth }) => {
             <ModalFormLogin onSubmit={handleSubmit}>
               {!isLogin && (
                 <ModalInput
+                  $error={errors.name || undefined}
                   type="text"
-                  name="first-name"
+                  name="name"
                   id="first-name"
+                  value={formData.name}
                   placeholder="Имя"
+                  onChange={handleChange}
                 />
               )}
               <ModalInput
+                $error={errors.login || undefined}
                 type="text"
                 name="login"
+                value={formData.login}
                 id={isLogin ? "formlogin" : "loginReg"}
                 placeholder="Эл. почта"
+                onChange={handleChange}
               />
               <ModalInput
+                $error={errors.password || undefined}
                 type="password"
                 name="password"
+                value={formData.password}
                 id={isLogin ? "formpassword" : "passwordFirst"}
                 placeholder="Пароль"
+                onChange={handleChange}
               />
+              <ErrorEl>{error}</ErrorEl>
               {isLogin ? (
-                <ModalBtnEnter type="submit" id="btnEnter">
+                <ModalBtnEnter type="submit" id="btnEnter"  $error={errors.login || errors.password}>
                   Войти
                 </ModalBtnEnter>
               ) : (
-                <ModalBtnSignupEnt id="SignUpEnter">
+                <ModalBtnSignupEnt id="SignUpEnter" $error={errors.name || errors.login || errors.password}>
                   Зарегистрироваться
                 </ModalBtnSignupEnt>
               )}

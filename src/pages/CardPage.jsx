@@ -1,7 +1,24 @@
 import PopBrowse from "../components/PopBrowse/PopBrowse";
+import { useParams, useOutletContext } from "react-router-dom";
+import { getTaskId } from "../services/api";
+import { useEffect, useState } from "react";
 
 const CardPage = () => {
-  return  <PopBrowse />;
-}
+  
+  const { token, getTasks } = useOutletContext();
+  const [task, setTask] = useState(null);
 
-export default CardPage
+  const { id } = useParams();
+  useEffect(() => {
+    const loadTask = async () => {
+      const data = await getTaskId({ id, token });
+      setTask(data.task);
+    };
+
+    loadTask();
+  }, [id, token]);
+
+  return <PopBrowse task={task} token={token} onTaskUpdated={getTasks} />;
+};
+
+export default CardPage;

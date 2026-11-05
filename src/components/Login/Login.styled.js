@@ -103,6 +103,12 @@ export const ModalInput = styled.input`
     letter-spacing: -0.28px;
     color: #94a6be;
   }
+
+  ${({ $error }) =>
+    $error &&
+    `
+  border: 1px solid #F84D4D;
+  `}
 `;
 
 export const ModalBtnEnter = styled(Hover01)`
@@ -122,6 +128,12 @@ export const ModalBtnEnter = styled(Hover01)`
   font-weight: 500;
   letter-spacing: -0.14px;
   color: #ffffff;
+
+  ${({ $error }) =>
+    $error &&
+    `
+background-color: #94A6BE;
+`}
 
   @media screen and (max-width: 375px) {
     & {

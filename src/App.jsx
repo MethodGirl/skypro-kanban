@@ -12,9 +12,9 @@ import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   const [isAuth, setIsAuth] = useState(
-    sessionStorage.getItem("isAuth") === "true",
+    Boolean(sessionStorage.getItem("userInfo")),
   );
-
+  
   return (
     <>
       <GlobalStyles />
@@ -28,7 +28,10 @@ function App() {
         </Route>
 
         <Route path="/login" element={<LoginPage setIsAuth={setIsAuth} />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/register"
+          element={<RegisterPage setIsAuth={setIsAuth} />}
+        />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
