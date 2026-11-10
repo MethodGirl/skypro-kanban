@@ -1,3 +1,4 @@
+import { useAuth } from "../../context/auth/useAuth";
 import {
   PopExit as PopExitWrapper,
   PopExitBlock,
@@ -9,14 +10,15 @@ import {
 } from "./PopExit.styled";
 import { useNavigate } from "react-router-dom";
 
-const PopExit = ({ setIsAuth }) => {
+const PopExit = () => {
+  const { setIsAuth } = useAuth();
   const navigate = useNavigate();
 
   const handleExit = (e) => {
     e.preventDefault();
 
     setIsAuth(false);
-    sessionStorage.removeItem("isAuth");
+    sessionStorage.removeItem("userInfo");
 
     navigate("/login");
   };

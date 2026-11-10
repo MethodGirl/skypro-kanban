@@ -9,9 +9,11 @@ export const PopUserSet = styled.div`
     width: 72px;
     height: 30px;
     background: transparent;
-    color: #565eef;
+    color: ${({ $theme }) =>
+      $theme === "dark" ? "#FFFFFF" : "rgb(86, 94, 239)"};
     border-radius: 4px;
-    border: 1px solid #565eef;
+    border: ${({ $theme }) =>
+      $theme === "dark" ? "1px solid #FFFFFF" : "1px solid #565eef"};
   }
 
   button a {
@@ -20,7 +22,7 @@ export const PopUserSet = styled.div`
 `;
 
 export const PopUserSetName = styled.p`
-  color: #000;
+  color: ${({ $theme }) => ($theme === "dark" ? "#FFFFFF" : "#000")};
   font-size: 14px;
   font-weight: 500;
   line-height: 21px;
@@ -43,7 +45,7 @@ export const PopUserSetTheme = styled.div`
   margin-bottom: 30px;
 
   p {
-    color: #000;
+    color: ${({ $theme }) => ($theme === "dark" ? "#FFFFFF" : "#000")};
     font-size: 14px;
     line-height: 21px;
     letter-spacing: -0.14px;
@@ -75,5 +77,6 @@ export const PopUserSetTheme = styled.div`
 
   input:checked[type="checkbox"]::before {
     left: 12px;
+    background-color: #565eef;
   }
 `;

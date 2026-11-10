@@ -1,3 +1,4 @@
+import { useTheme } from "../../context/theme/useTheme.js";
 import Card from "../Card/Card";
 import { MainColumn, ColumnTitle, Cards } from "./Column.styled.js";
 import { useNavigate } from "react-router-dom";
@@ -5,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const Column = (props) => {
   const { condition, tasks } = props;
   const navigate = useNavigate();
+  const {theme} = useTheme()
 
   const handleShowCard = (id) => {
     navigate(`/card/${id}`);
@@ -22,6 +24,7 @@ const Column = (props) => {
           })
           .map((task) => (
             <Card
+              data-theme={theme}
               onClick={() => handleShowCard(task._id)}
               key={task._id}
               id={task._id}

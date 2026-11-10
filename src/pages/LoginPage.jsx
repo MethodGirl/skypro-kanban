@@ -1,7 +1,7 @@
 import AuthForm from "../components/AuthForm.jsx/AuthForm";
 
-const LoginPage = ({setIsAuth}) => {
-  return  <AuthForm isLogin={true} setIsAuth={setIsAuth} />;
+const LoginPage = () => {
+  return <AuthForm isLogin={true} />;
 };
 
 export default LoginPage;

@@ -1,7 +1,7 @@
 import PopExit from "../components/PopExit/PopExit";
 
-const ExitPage = ({ setIsAuth, onClose }) => {
-  return <PopExit setIsAuth={setIsAuth} onClose={onClose} />;
+const ExitPage = ({ onClose }) => {
+  return <PopExit onClose={onClose} />;
 };
 
 export default ExitPage;

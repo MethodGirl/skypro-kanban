@@ -1,8 +1,11 @@
 import { useState } from "react";
 import Calendar from "../Calendar/Calendar";
 import { postTask } from "../../services/api.js";
+import { useTask } from "../../context/task/useTask.js";
 
-const PopNewCard = ({ onClose, onTaskAdded, token }) => {
+const PopNewCard = ({ onClose, token }) => {
+  const { getTasks } = useTask();
+
   const [formData, setFormData] = useState({
     title: "Новая задача",
     description: "",
@@ -31,7 +34,7 @@ const PopNewCard = ({ onClose, onTaskAdded, token }) => {
 
       await postTask({ task, token });
 
-      await onTaskAdded();
+      await getTasks();
 
       onClose();
     } catch (error) {

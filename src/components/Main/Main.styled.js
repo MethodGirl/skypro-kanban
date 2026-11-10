@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 export const Main = styled.main`
   width: 100%;
-  background-color: #eaeef6;
+   background-color: ${({ $theme }) =>
+    $theme === "dark" ? "#151419" : "rgb(234, 238, 246)"};
 `;
 
 export const MainBlock = styled.div`

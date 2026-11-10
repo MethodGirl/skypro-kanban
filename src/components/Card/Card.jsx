@@ -1,3 +1,4 @@
+import { useTheme } from "../../context/theme/useTheme.js";
 import {
   CardButton,
   CardsItem,
@@ -11,6 +12,7 @@ import {
 
 const Card = (props) => {
   const { topic, title, date, onClick } = props;
+  const {theme} = useTheme()
 
   const formattedDate = new Date(date).toLocaleDateString("ru-RU", {
     day: "2-digit",
@@ -19,10 +21,10 @@ const Card = (props) => {
   });
 
   return (
-    <CardsItem onClick={onClick}>
-      <CardsCard>
+    <CardsItem  onClick={onClick}>
+      <CardsCard $theme={theme}>
         <CardGroup>
-          <CardTheme $topic={topic}>
+          <CardTheme $theme={theme} $topic={topic}>
             <p>{topic}</p>
           </CardTheme>
 
@@ -39,8 +41,8 @@ const Card = (props) => {
           </CardButton>
         </CardGroup>
 
-        <CardContent>
-          <CardTitle>{title}</CardTitle>
+        <CardContent >
+          <CardTitle $theme={theme}>{title}</CardTitle>
 
           <CardDate>
             <svg

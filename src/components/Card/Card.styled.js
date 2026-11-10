@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const CardsItem = styled.div`
   padding: 5px;
@@ -10,7 +10,8 @@ export const CardsItem = styled.div`
 export const CardsCard = styled.div`
   width: 220px;
   height: 130px;
-  background-color: #ffffff;
+  background-color: ${({ $theme }) =>
+    $theme === "dark" ? "#20202C" : "#FFFFFF"};
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -22,7 +23,8 @@ export const CardsCard = styled.div`
     & {
       width: 220px;
       height: 130px;
-      background-color: #ffffff;
+      background-color: ${({ $theme }) =>
+        $theme === "dark" ? "#20202C" : "#FFFFFF"};
       border-radius: 10px;
       display: flex;
       flex-direction: column;
@@ -43,25 +45,25 @@ export const CardGroup = styled.div`
 `;
 
 export const CardTheme = styled.div`
-  ${({ $topic }) => {
+  ${({ $topic, $theme }) => {
     switch ($topic) {
       case "Research":
-        return `
-   background-color: #B4FDD1;
-    color: #06B16E;
-    `;
+        return css`
+          background-color: ${$theme === "dark" ? "#06B16E" : "#B4FDD1"};
+          color: ${$theme === "dark" ? "#B4FDD1" : "#06B16E"};
+        `;
 
       case "Copywriting":
-        return `
-    background-color: #E9D4FF;
-    color: #9A48F1;
-    `;
+        return css`
+          background-color: ${$theme === "dark" ? "#9A48F1" : "#E9D4FF"};
+          color: ${$theme === "dark" ? "#E9D4FF" : "#9A48F1"};
+        `;
 
       case "Web Design":
-        return `
-   background-color: #FFE4C2;
-    color: #FF6D00;
-    `;
+        return css`
+          background-color: ${$theme === "dark" ? "#FF6D00" : "#FFE4C2"};
+          color: ${$theme === "dark" ? "#FFE4C2" : "#FF6D00"};
+        `;
     }
   }}
 
@@ -97,7 +99,7 @@ export const CardTitle = styled.h3`
   font-size: 14px;
   font-weight: 500;
   line-height: 18px;
-  color: #000000;
+  color: ${({ $theme }) => ($theme === "dark" ? "#FFFFFF" : "#000000")};
   margin-bottom: 10px;
 `;
 

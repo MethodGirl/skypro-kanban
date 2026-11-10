@@ -3,9 +3,12 @@ import Calendar from "../Calendar/Calendar";
 import Loader from "../Loader/Loader";
 import { putTask, deleteTask } from "../../services/api";
 import { useState } from "react";
+import { useTask } from "../../context/task/useTask";
 
-const PopBrowse = ({ task, token, onTaskUpdated }) => {
+
+const PopBrowse = ({ task, token}) => {
   const navigate = useNavigate();
+  const { getTasks } = useTask();
 
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -62,7 +65,7 @@ const PopBrowse = ({ task, token, onTaskUpdated }) => {
         token,
       });
 
-      await onTaskUpdated();
+      await getTasks();
       navigate("/");
     } catch (error) {
       setError(error.message || "Не удалось сохранить задачу");
@@ -112,7 +115,7 @@ const PopBrowse = ({ task, token, onTaskUpdated }) => {
 
     await deleteTask({ id: task._id, token });
 
-    await onTaskUpdated();
+    await getTasks();
 
     navigate("/");
   };
@@ -286,7 +289,7 @@ const PopBrowse = ({ task, token, onTaskUpdated }) => {
                   <button
                     type="button"
                     className="btn-edit__delete _btn-bor _hover03"
-                    onClick={handleClose}
+                    onClick={handleDelete}
                   >
                     Удалить задачу
                   </button>

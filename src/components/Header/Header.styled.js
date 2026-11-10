@@ -11,8 +11,11 @@ export const HeaderPopUserSet = styled(PopUserSet)`
   height: 205px;
   border-radius: 10px;
   border: 0.7px solid rgba(148, 166, 190, 0.4);
-  background: #fff;
-  box-shadow: 0px 10px 39px 0px rgba(26, 56, 101, 0.21);
+  background-color: ${({ $theme }) => ($theme === "dark" ? "#202229" : "#fff")};
+  box-shadow: ${({ $theme }) =>
+    $theme === "dark"
+      ? "0px 10px 39px 0px rgba(148, 166, 190, 0.40)"
+      : "0px 10px 39px 0px rgba(26, 56, 101, 0.21)"};
   padding: 34px;
   text-align: center;
   z-index: 2;
@@ -48,7 +51,8 @@ export const Hover03 = styled.button`
 export const Header = styled.header`
   width: 100%;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: ${({ $theme }) =>
+    $theme === "dark" ? "#20202C" : "#FFFFFF"};
 `;
 
 export const Container = styled.div`
@@ -136,7 +140,7 @@ export const UserButton = styled(Button)`
   background-color: transparent;
   width: 84px;
   position: relative;
-  color: #565eef;
+  color: ${({ $theme }) => ($theme === "dark" ? "#FFFFFF" : "#565eef")};
 
   &::after {
     content: "";
@@ -145,8 +149,10 @@ export const UserButton = styled(Button)`
     width: 6px;
     height: 6px;
     border-radius: 1px;
-    border-left: 1.9px solid #565eef;
-    border-bottom: 1.9px solid #565eef;
+    border-left: ${({ $theme }) =>
+      $theme === "dark" ? "1.9px solid #FFFFFF" : "1.9px solid #565eef"};
+    border-bottom: ${({ $theme }) =>
+      $theme === "dark" ? "1.9px solid #FFFFFF" : "1.9px solid #565eef"};
     transform: rotate(-45deg);
     right: -10px;
     top: 1px;

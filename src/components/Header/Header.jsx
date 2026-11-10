@@ -22,15 +22,20 @@ import {
 import { useNavigate } from "react-router-dom";
 import PopNewCard from "../PopNewCard/PopNewCard.jsx";
 import { Link } from "react-router-dom";
+import { useTheme } from "../../context/theme/useTheme.js";
 
-const Header = ({ setIsAuth, onTaskAdded, token }) => {
+const Header = ({ token }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isExitOpen, setIsExitOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const { toggleTheme, theme } = useTheme();
   const navigate = useNavigate();
 
+  const user = sessionStorage.getItem("userInfo");
+  const userObj = JSON.parse(user);
+
   return (
-    <HeaderWrapper>
+    <HeaderWrapper $theme={theme}>
       <Container>
         <HeaderBlock>
           <LogoLight>
@@ -51,16 +56,22 @@ const Header = ({ setIsAuth, onTaskAdded, token }) => {
             >
               Создать новую задачу
             </CreateTaskButton>
-            <UserButton onClick={() => setIsOpen(!isOpen)}>
-              <a>Ivan Ivanov</a>
+            <UserButton $theme={theme} onClick={() => setIsOpen(!isOpen)}>
+              <a>{userObj.name}</a>
             </UserButton>
             {isOpen && (
-              <HeaderPopUserSet id="user-set-target">
-                <PopUserSetName> Ivan Ivanov</PopUserSetName>
-                <PopUserSetMail>ivan.ivanov@gmail.com</PopUserSetMail>
-                <PopUserSetTheme>
-                  <p>Темная тема</p>
-                  <input type="checkbox" className="checkbox" name="checkbox" />
+              <HeaderPopUserSet $theme={theme} id="user-set-target">
+                <PopUserSetName $theme={theme}>{userObj.name}</PopUserSetName>
+                <PopUserSetMail>{userObj.login}</PopUserSetMail>
+                <PopUserSetTheme $theme={theme}>
+                  <p >Темная тема</p>
+                  <input
+                    type="checkbox"
+                    className="checkbox"
+                    name="checkbox"
+                    onChange={toggleTheme}
+                    checked={theme === "light" ? false : true}
+                  />
                 </PopUserSetTheme>
                 <Hover03
                   type="button"
@@ -77,13 +88,9 @@ const Header = ({ setIsAuth, onTaskAdded, token }) => {
         </HeaderBlock>
       </Container>
       {isCreateOpen && (
-        <PopNewCard
-          onClose={() => setIsCreateOpen(false)}
-          onTaskAdded={onTaskAdded}
-          token={token}
-        />
+        <PopNewCard onClose={() => setIsCreateOpen(false)} token={token} />
       )}
-      {isExitOpen && <ExitPage setIsAuth={setIsAuth} />}
+      {isExitOpen && <ExitPage />}
     </HeaderWrapper>
   );
 };
