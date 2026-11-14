@@ -83,7 +83,6 @@ const AuthForm = ({ isLogin }) => {
     }
 
     setErrors(newErrors);
-    console.log("Ошибки формы:", newErrors);
     return isValid;
   };
 

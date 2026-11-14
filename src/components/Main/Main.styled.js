@@ -29,3 +29,21 @@ export const MainContent = styled.div`
     }
   }
 `;
+
+export const ErrorMessage = styled.div`
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+
+  background-color: ${({ $theme }) =>
+    $theme === "dark" ? "#3b252b" : "#fff0f0"};
+
+  border: 1px solid
+    ${({ $theme }) =>
+      $theme === "dark" ? "#75404a" : "#ffcaca"};
+
+  color: ${({ $theme }) =>
+    $theme === "dark" ? "#ffb8c2" : "#c0392b"};
+`;

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import Column from "../Column/Column";
-import { Main as MainWrapper, MainBlock, MainContent } from "./Main.styled.js";
+import { Main as MainWrapper, MainBlock, MainContent, ErrorMessage } from "./Main.styled.js";
 import { Container } from "../../styles/Common.styled.js";
 import GlobalStyles from "../../styles/GlobalStyles.js";
 import { useTask } from "../../context/task/useTask.js";
@@ -112,10 +112,16 @@ const Main = () => {
       <MainWrapper $theme={theme}>
         <Container>
           <MainBlock>
-            {saveError && <p>{saveError}</p>}
+            {saveError && (
+              <ErrorMessage $theme={theme}>
+                Не удалось сохранить изменения. Попробуйте ещё раз.
+              </ErrorMessage>
+            )}
 
             {error ? (
-              <p>{error}</p>
+              <ErrorMessage $theme={theme}>
+                Не удалось загрузить задачи. Попробуйте обновить страницу.
+              </ErrorMessage>
             ) : !isLoading && tasks.length === 0 ? (
               <p>Новых задач нет</p>
             ) : (
