@@ -1,16 +1,60 @@
-# React + Vite
+# 🌷 Kanban
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+*Приложение для управления задачами и планирования работы.*
 
-Currently, two official plugins are available:
+Kanban — это доска, на которой можно создавать задачи, распределять их по этапам и следить за их выполнением. Карточки можно перемещать между колонками и менять их порядок с помощью **Drag & Drop**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## ✨ Возможности
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Регистрация, авторизация и выход из аккаунта.
+- Создание, редактирование и удаление задач.
+- Просмотр подробной информации о задаче.
+- Распределение задач по колонкам в зависимости от статуса.
+- Перемещение карточек между колонками с помощью **Drag & Drop**.
+- Изменение порядка карточек внутри колонок.
+- Сохранение изменений задач на сервере.
+- Сохранение порядка карточек в `localStorage`.
+- Хранение временных данных с помощью `sessionStorage`.
+- Переключение между светлой и тёмной темами.
+- Защита страниц от доступа без авторизации.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🎨 Статусы задач
+
+На доске предусмотрено пять колонок:
+
+| Статус | Описание |
+|:---|:---|
+| Без статуса | Задачи без определённого этапа |
+| Нужно сделать | Задачи, ожидающие выполнения |
+| В работе | Задачи, над которыми ведётся работа |
+| Тестирование | Задачи на этапе проверки |
+| Готово | Завершённые задачи |
+
+---
+
+## 🛠 Технологии
+
+| Технология | Использование |
+|:---|:---|
+| **React** | Создание интерфейса |
+| **JavaScript** | Логика приложения |
+| **React Router** | Навигация между страницами |
+| **React Context API** | Управление общим состоянием |
+| **styled-components** | Стилизация компонентов |
+| **Axios** | Работа с API |
+| **@dnd-kit/react** | Перетаскивание карточек |
+| **@dnd-kit/helpers** | Изменение порядка элементов |
+| **Vite** | Сборка и запуск проекта |
+
+---
+
+## 🚀 Запуск проекта
+
+**1. Клонировать репозиторий**
+
+```bash
+git clone https://github.com/MethodGirl/skypro-kanban.git
