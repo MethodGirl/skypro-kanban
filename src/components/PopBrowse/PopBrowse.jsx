@@ -1,20 +1,62 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Calendar from "../Calendar/Calendar";
 import Loader from "../Loader/Loader";
 import { putTask, deleteTask } from "../../services/api";
-import { useState } from "react";
 import { useTask } from "../../context/task/useTask";
+import { useTheme } from "../../context/theme/useTheme.js";
 
+import {
+  PopBrowseWrapper,
+  PopBrowseContainer,
+  PopBrowseBlock,
+  PopBrowseContent,
+  PopBrowseTopBlock,
+  PopBrowseTitle,
+  TopicBadge,
+  TopicText,
+  StatusSection,
+  StatusLabel,
+  StatusList,
+  StatusButton,
+  PopBrowseWrap,
+  PopBrowseForm,
+  FormBrowseBlock,
+  FormBrowseLabel,
+  FormBrowseTextarea,
+  CalendarWrap,
+  ErrorMessage,
+  BrowseActions,
+  ButtonGroup,
+  ActionButton,
+  SaveButton,
+  CloseButton,
+} from "./PopBrowse.styled.js";
 
-const PopBrowse = ({ task, token}) => {
+const PopBrowse = ({ task, token }) => {
   const navigate = useNavigate();
   const { getTasks } = useTask();
+  const { theme } = useTheme();
 
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
-
   const [formData, setFormData] = useState(null);
+
+  useEffect(() => {
+    if (!task) return;
+
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
+    };
+  }, [task]);
 
   const handleClose = () => {
     navigate("/");
@@ -85,136 +127,83 @@ const PopBrowse = ({ task, token}) => {
     return <Loader />;
   }
 
-  const topicClass =
-    task?.topic === "Copywriting"
-      ? "_purple"
-      : task?.topic === "Research"
-        ? "_green"
-        : "_orange";
-
-  const currentTopicClass =
-    formData?.topic === "Copywriting"
-      ? "_purple"
-      : formData?.topic === "Research"
-        ? "_green"
-        : "_orange";
-
   const handleStatus = (event) => {
-    event.preventDefault();
-
-    const newStatus = event.target.textContent;
-
-    setFormData((prev) => ({
-      ...prev,
-      status: newStatus,
-    }));
+    const newStatus = event.currentTarget.textContent;
+    updateField("status", newStatus);
   };
 
   const handleDelete = async (event) => {
     event.preventDefault();
 
     await deleteTask({ id: task._id, token });
-
     await getTasks();
 
     navigate("/");
   };
 
+  const statuses = [
+    "Без статуса",
+    "Нужно сделать",
+    "В работе",
+    "Тестирование",
+    "Готово",
+  ];
+
+  const currentTopic = isEditing ? formData.topic : task.topic;
+  const currentStatus = isEditing ? formData.status : task.status;
+
   return (
-    <div className="pop-browse">
-      <div className="pop-browse__container">
-        <div className="pop-browse__block">
-          <div className="pop-browse__content">
-            <div className="pop-browse__top-block">
-              <h3 className="pop-browse__ttl">
+    <PopBrowseWrapper>
+      <PopBrowseContainer $theme={theme}>
+        <PopBrowseBlock $theme={theme}>
+          <PopBrowseContent>
+            <PopBrowseTopBlock>
+              <PopBrowseTitle $theme={theme}>
                 {isEditing ? formData.title : task.title}
-              </h3>
+              </PopBrowseTitle>
 
-              <div
-                className={`categories__theme theme-top ${
-                  isEditing ? currentTopicClass : topicClass
-                } _active-category`}
-              >
-                <p className={isEditing ? currentTopicClass : topicClass}>
-                  {isEditing ? formData.topic : task.topic}
-                </p>
-              </div>
-            </div>
+              <TopicBadge $topic={currentTopic} $theme={theme}>
+                <TopicText>{currentTopic}</TopicText>
+              </TopicBadge>
+            </PopBrowseTopBlock>
 
-            <div className="pop-browse__status status">
-              <p className="status__p subttl">Статус</p>
-              <div className="status__themes">
+            <StatusSection>
+              <StatusLabel $theme={theme}>Статус</StatusLabel>
+
+              <StatusList>
                 {!isEditing ? (
-                  <div className="status__theme _gray">
-                    <p className="_gray">
-                      {isEditing ? formData.status : task.status}
-                    </p>
-                  </div>
+                  <StatusButton type="button" $theme={theme} $active>
+                    {currentStatus}
+                  </StatusButton>
                 ) : (
-                  <>
-                    <div
-                      className={`status__theme ${formData.status === "Без статуса" ? "_gray" : ""}`}
+                  statuses.map((status) => (
+                    <StatusButton
+                      $theme={theme}
+                      key={status}
                       type="button"
-                      onClick={(e) => {
-                        handleStatus(e);
-                      }}
+                      $active={formData.status === status}
+                      onClick={handleStatus}
                     >
-                      <p>Без статуса</p>
-                    </div>
-                    <div
-                      className={`status__theme ${formData.status === "Нужно сделать" ? "_gray" : ""}`}
-                      type="button"
-                      onClick={(e) => {
-                        handleStatus(e);
-                      }}
-                    >
-                      <p>Нужно сделать</p>
-                    </div>
-                    <div
-                      className={`status__theme ${formData.status === "В работе" ? "_gray" : ""}`}
-                      type="button"
-                      onClick={(e) => {
-                        handleStatus(e);
-                      }}
-                    >
-                      <p>В работе</p>
-                    </div>
-                    <div
-                      className={`status__theme ${formData.status === "Тестирование" ? "_gray" : ""}`}
-                      type="button"
-                      onClick={(e) => {
-                        handleStatus(e);
-                      }}
-                    >
-                      <p>Тестирование</p>
-                    </div>
-                    <div
-                      className={`status__theme ${formData.status === "Готово" ? "_gray" : ""}`}
-                      type="button"
-                      onClick={(e) => {
-                        handleStatus(e);
-                      }}
-                    >
-                      <p>Готово</p>
-                    </div>
-                  </>
+                      {status}
+                    </StatusButton>
+                  ))
                 )}
-              </div>
-            </div>
+              </StatusList>
+            </StatusSection>
 
-            <div className="pop-browse__wrap">
-              <form
-                className="pop-browse__form form-browse"
+            <PopBrowseWrap>
+              <PopBrowseForm
                 id="formBrowseCard"
                 onSubmit={(event) => event.preventDefault()}
               >
-                <div className="form-browse__block">
-                  <label htmlFor="textArea01" className="subttl">
+                <FormBrowseBlock>
+                  <FormBrowseLabel $theme={theme} htmlFor="textArea01">
                     Описание задачи
-                  </label>
+                  </FormBrowseLabel>
 
-                  <textarea
-                    className="form-browse__area"
+                  <FormBrowseTextarea
+                    $isEditing={isEditing}
+                    $theme={theme}
                     name="text"
                     id="textArea01"
                     readOnly={!isEditing}
@@ -226,88 +215,93 @@ const PopBrowse = ({ task, token}) => {
                       updateField("description", event.target.value)
                     }
                   />
-                </div>
-              </form>
+                </FormBrowseBlock>
+              </PopBrowseForm>
 
-              <Calendar
-                date={isEditing ? formData.date : task.date}
-                isEditable={isEditing}
-              />
-            </div>
+              <CalendarWrap>
+                <Calendar
+                  date={isEditing ? formData.date : task.date}
+                  isEditable={isEditing}
+                  onDateChange={(date) => updateField("date", date)}
+                />
+              </CalendarWrap>
+            </PopBrowseWrap>
 
-            {error && <p className="error-message">{error}</p>}
+            {error && <ErrorMessage>{error}</ErrorMessage>}
 
             {!isEditing ? (
-              <div className="pop-browse__btn-browse">
-                <div className="btn-group">
-                  <button
+              <BrowseActions>
+                <ButtonGroup>
+                  <ActionButton
                     type="button"
-                    className="btn-browse__edit _btn-bor _hover03"
                     onClick={handleEdit}
+                    $theme={theme}
                   >
                     Редактировать задачу
-                  </button>
+                  </ActionButton>
 
-                  <button
+                  <ActionButton
                     type="button"
-                    className="btn-browse__delete _btn-bor _hover03"
                     onClick={handleDelete}
+                    $theme={theme}
                   >
                     Удалить задачу
-                  </button>
-                </div>
+                  </ActionButton>
 
-                <button
-                  type="button"
-                  className="btn-browse__close _btn-bg _hover01"
-                  onClick={handleClose}
-                >
-                  Закрыть
-                </button>
-              </div>
-            ) : (
-              <div className="pop-browse__btn-edit">
-                <div className="btn-group">
-                  <button
+                  <CloseButton
                     type="button"
-                    className="btn-edit__edit _btn-bg _hover01"
+                    onClick={handleClose}
+                    $theme={theme}
+                  >
+                    Закрыть
+                  </CloseButton>
+                </ButtonGroup>
+              </BrowseActions>
+            ) : (
+              <BrowseActions>
+                <ButtonGroup>
+                  <SaveButton
+                    $isEditing={isEditing}
+                    type="button"
                     onClick={handleSave}
                     disabled={isSaving}
+                    $theme={theme}
                   >
                     {isSaving ? "Сохранение..." : "Сохранить"}
-                  </button>
+                  </SaveButton>
 
-                  <button
+                  <ActionButton
                     type="button"
-                    className="btn-edit__edit _btn-bor _hover03"
+                    $theme={theme}
                     onClick={handleCancel}
                     disabled={isSaving}
                   >
                     Отменить
-                  </button>
+                  </ActionButton>
 
-                  <button
+                  <ActionButton
+                    $theme={theme}
                     type="button"
-                    className="btn-edit__delete _btn-bor _hover03"
                     onClick={handleDelete}
                   >
                     Удалить задачу
-                  </button>
-                </div>
+                  </ActionButton>
 
-                <button
-                  type="button"
-                  className="btn-edit__close _btn-bg _hover01"
-                  onClick={handleClose}
-                >
-                  Закрыть
-                </button>
-              </div>
+                  <CloseButton
+                    $isEditing={isEditing}
+                    $theme={theme}
+                    type="button"
+                    onClick={handleClose}
+                  >
+                    Закрыть
+                  </CloseButton>
+                </ButtonGroup>
+              </BrowseActions>
             )}
-          </div>
-        </div>
-      </div>
-    </div>
+          </PopBrowseContent>
+        </PopBrowseBlock>
+      </PopBrowseContainer>
+    </PopBrowseWrapper>
   );
 };
 

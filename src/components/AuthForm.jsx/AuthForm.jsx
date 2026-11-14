@@ -16,10 +16,13 @@ import { ModalBtnSignupEnt } from "../SignUp/SignUp.styled.js";
 import { Link, useNavigate } from "react-router-dom";
 import { ErrorEl } from "./Error.styled.js";
 import { useAuth } from "../../context/auth/useAuth.js";
+import { useTheme } from "../../context/theme/useTheme.js";
+
 
 const AuthForm = ({ isLogin }) => {
   const navigate = useNavigate();
   const { setIsAuth } = useAuth();
+  const {theme} = useTheme();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -36,6 +39,7 @@ const AuthForm = ({ isLogin }) => {
   const [error, setError] = useState("");
 
   const validateForm = () => {
+    console.log("Пароль:", JSON.stringify(formData.password));
     const newErrors = { name: "", password: "", login: "" };
     let isValid = true;
 
@@ -79,6 +83,7 @@ const AuthForm = ({ isLogin }) => {
     }
 
     setErrors(newErrors);
+    console.log("Ошибки формы:", newErrors);
     return isValid;
   };
 
@@ -122,16 +127,17 @@ const AuthForm = ({ isLogin }) => {
   };
 
   return (
-    <AuthWrapper>
-      <ContainerSignIn>
+    <AuthWrapper $theme={theme}>
+      <ContainerSignIn $theme={theme}>
         <Modal>
-          <ModalBlock>
-            <ModalTtl>
+          <ModalBlock $theme={theme}>
+            <ModalTtl $theme={theme}>
               <h2>{isLogin ? "Вход" : "Регистрация"}</h2>
             </ModalTtl>
             <ModalFormLogin onSubmit={handleSubmit}>
               {!isLogin && (
                 <ModalInput
+                  $theme={theme}
                   $error={errors.name || undefined}
                   type="text"
                   name="name"
@@ -142,6 +148,7 @@ const AuthForm = ({ isLogin }) => {
                 />
               )}
               <ModalInput
+                $theme={theme}
                 $error={errors.login || undefined}
                 type="text"
                 name="login"
@@ -151,6 +158,7 @@ const AuthForm = ({ isLogin }) => {
                 onChange={handleChange}
               />
               <ModalInput
+                $theme={theme}
                 $error={errors.password || undefined}
                 type="password"
                 name="password"

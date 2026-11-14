@@ -9,13 +9,13 @@ import { ThemeContextProvider } from "./context/theme/ThemeContextProvider.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <AuthContextProvider>
-        <TaskContextProvider>
-          <ThemeContextProvider>
+      <ThemeContextProvider>
+        <AuthContextProvider>
+          <TaskContextProvider>
             <App />
-          </ThemeContextProvider>
-        </TaskContextProvider>
-      </AuthContextProvider>
+          </TaskContextProvider>
+        </AuthContextProvider>
+      </ThemeContextProvider>
     </BrowserRouter>
   </StrictMode>,
 );

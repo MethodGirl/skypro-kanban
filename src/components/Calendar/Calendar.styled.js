@@ -1,4 +1,5 @@
-import styled from "styled-components";
+
+import { styled, css } from "styled-components";
 
 export const Subttl = styled.div`
   color: #000;
@@ -12,10 +13,8 @@ export const Calendar = styled.div`
   margin-bottom: 20px;
 
   @media screen and (max-width: 660px) {
-    & {
-      max-width: 340px;
-      width: 100%;
-    }
+    max-width: 340px;
+    width: 100%;
 
     .date-create {
       display: none;
@@ -27,11 +26,10 @@ export const Calendar = styled.div`
 export const CalendarTtl = styled(Subttl)`
   margin-bottom: 14px;
   padding: 0 7px;
+  color: ${({ $theme }) => ($theme === "light" ? "#000" : "#ffffff")};
 
   @media screen and (max-width: 660px) {
-    & {
-      padding: 0;
-    }
+    padding: 0;
   }
 `;
 
@@ -39,16 +37,14 @@ export const CalendarP = styled.p`
   color: #94a6be;
   font-size: 10px;
   line-height: 1;
-  margin-bottom: 7px
+  margin-bottom: 7px;
 
   span {
-    color: #000000;
+    color: ${({ $theme }) => ($theme === "light" ? "#000" : "#ffffff")};
   }
 
   @media screen and (max-width: 660px) {
-    & {
-      font-size: 14px;
-    }
+    font-size: 14px;
   }
 `;
 
@@ -68,12 +64,16 @@ export const CalendarContent = styled.div`
 `;
 
 export const CalendarDaysNames = styled.div`
-  display: flex;
-  flex-wrap: nowrap;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   align-items: center;
-  justify-content: space-between;
+  justify-items: center;
   margin: 7px 0;
   padding: 0 7px;
+
+  @media screen and (max-width: 660px) {
+    padding: 0;
+  }
 `;
 
 export const CalendarDayName = styled.div`
@@ -84,78 +84,70 @@ export const CalendarDayName = styled.div`
   letter-spacing: -0.2px;
 
   @media screen and (max-width: 660px) {
-    & {
-      font-size: 14px;
-    }
+    font-size: 14px;
   }
 `;
 
 export const CalendarCells = styled.div`
   width: 182px;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-auto-rows: 26px;
+  justify-items: center;
+  align-items: center;
 
   @media screen and (max-width: 660px) {
-    & {
-      width: 344px;
-      height: auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-    }
+    width: 100%;
+    grid-auto-rows: 46px;
   }
 `;
 
 export const CalendarCell = styled.div`
   width: 22px;
   height: 22px;
-  margin: 2px;
   border-radius: 50%;
   display: flex;
-  flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
   color: #94a6be;
   font-size: 10px;
   line-height: 1;
-  font-weight:400;
+  font-weight: 400;
   letter-spacing: -0.2px;
   cursor: pointer;
 
   ${({ $otherMonth }) =>
     $otherMonth &&
-    `
-       opacity: 0;
+    css`
+      opacity: 0;
     `}
 
   ${({ $cellday }) =>
     $cellday &&
-    `
+    css`
       &:hover {
-        color: #94A6BE;
-        background-color: #EAEEF6;
+        color: #94a6be;
+        background-color: #ea eef6;
       }
     `}
 
-      ${({ $current }) =>
+  ${({ $current }) =>
     $current &&
-    `
-       font-weight: 700;
+    css`
+      font-weight: 700;
     `}
 
-      ${({ $activeday }) =>
+  ${({ $activeday }) =>
     $activeday &&
-    `
-       background-color: #94A6BE;
-       color: #FFFFFF;
+    css`
+      background-color: #94a6be;
+      color: #ffffff;
     `}
 
-     @media screen and (max-width: 660px) {
-    & {
-      width: 42px;
-      height: 42px;
-      font-size: 14px;
-    }
+  @media screen and (max-width: 660px) {
+    width: 42px;
+    height: 42px;
+    font-size: 14px;
   }
 `;
 
@@ -168,9 +160,7 @@ export const CalendarNav = styled.div`
   padding: 0 7px;
 
   @media screen and (max-width: 660px) {
-    & {
-      padding: 0;
-    }
+    padding: 0;
   }
 `;
 
@@ -178,9 +168,7 @@ export const CalendarPeriod = styled.div`
   padding: 0 7px;
 
   @media screen and (max-width: 660px) {
-    & {
-      padding: 0;
-    }
+    padding: 0;
   }
 `;
 

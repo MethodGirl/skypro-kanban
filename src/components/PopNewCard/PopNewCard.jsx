@@ -1,10 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Calendar from "../Calendar/Calendar";
 import { postTask } from "../../services/api.js";
 import { useTask } from "../../context/task/useTask.js";
+import {
+  PopNewCardWrapper,
+  PopNewCardContainer,
+  PopNewCardBlock,
+  PopNewCardClose,
+  PopNewCardContent,
+  PopNewCardTitle,
+  PopNewCardWrap,
+  PopNewCardForm,
+  PopNewCardSubmit,
+  FormBlock,
+  FormLabel,
+  FormInput,
+  FormTextarea,
+  Categories,
+  CategoriesTitle,
+  CategoriesList,
+  Category,
+} from "./PopNewCard.styled.js";
+import { useTheme } from "../../context/theme/useTheme.js";
 
 const PopNewCard = ({ onClose, token }) => {
   const { getTasks } = useTask();
+  const { theme } = useTheme();
 
   const [formData, setFormData] = useState({
     title: "Новая задача",
@@ -44,34 +65,36 @@ const PopNewCard = ({ onClose, token }) => {
     }
   };
 
+  useEffect(() => {
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
+    };
+  }, []);
+
   return (
-    <div className="pop-new-card" onClick={onClose}>
-      <div
-        className="pop-new-card__container"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className="pop-new-card__block">
-          <div className="pop-new-card__content">
-            <h3 className="pop-new-card__ttl">Создание задачи</h3>
-            <button
-              type="button"
-              className="pop-new-card__close"
-              onClick={onClose}
-            >
+    <PopNewCardWrapper onClick={onClose}>
+      <PopNewCardContainer onClick={(event) => event.stopPropagation()}>
+        <PopNewCardBlock $theme={theme}>
+          <PopNewCardContent>
+            <PopNewCardTitle $theme={theme}>Создание задачи</PopNewCardTitle>
+            <PopNewCardClose type="button" onClick={onClose}>
               &#10006;
-            </button>
-            <div className="pop-new-card__wrap">
-              <form
-                className="pop-new-card__form form-new"
-                id="formNewCard"
-                onSubmit={handleSubmit}
-              >
-                <div className="form-new__block">
-                  <label htmlFor="formTitle" className="subttl">
+            </PopNewCardClose>
+            <PopNewCardWrap>
+              <PopNewCardForm id="formNewCard" onSubmit={handleSubmit}>
+                <FormBlock>
+                  <FormLabel htmlFor="formTitle" $theme={theme}>
+                    {" "}
                     Название задачи
-                  </label>
-                  <input
-                    className="form-new__input"
+                  </FormLabel>
+                  <FormInput
                     type="text"
                     name="name"
                     value={formData.title}
@@ -82,13 +105,12 @@ const PopNewCard = ({ onClose, token }) => {
                       setFormData({ ...formData, title: event.target.value })
                     }
                   />
-                </div>
-                <div className="form-new__block">
-                  <label htmlFor="textArea" className="subttl">
+                </FormBlock>
+                <FormBlock>
+                  <FormLabel htmlFor="textArea" $theme={theme}>
                     Описание задачи
-                  </label>
-                  <textarea
-                    className="form-new__area"
+                  </FormLabel>
+                  <FormTextarea
                     name="text"
                     value={formData.description}
                     id="textArea"
@@ -99,9 +121,9 @@ const PopNewCard = ({ onClose, token }) => {
                         description: event.target.value,
                       })
                     }
-                  ></textarea>
-                </div>
-              </form>
+                  />
+                </FormBlock>
+              </PopNewCardForm>
               <Calendar
                 isCreating={true}
                 date={formData.date}
@@ -109,56 +131,61 @@ const PopNewCard = ({ onClose, token }) => {
                   setFormData((prev) => ({ ...prev, date }))
                 }
               />
-            </div>
-            <div className="pop-new-card__categories categories">
-              <p className="categories__p subttl">Категория</p>
-              <div className="categories__themes">
-                <div
-                  className={`categories__theme _orange ${
-                    formData.topic === "Web Design" ? "_active-category" : ""
-                  }`}
-                  onClick={() => {
-                    setFormData({ ...formData, topic: "Web Design" });
-                  }}
+            </PopNewCardWrap>
+            <Categories>
+              <CategoriesTitle $theme={theme}>Категория</CategoriesTitle>
+
+              <CategoriesList>
+                <Category
+                  type="button"
+                  $topic="Web Design"
+                  $theme={theme}
+                  $active={formData.topic === "Web Design"}
+                  onClick={() =>
+                    setFormData({ ...formData, topic: "Web Design" })
+                  }
                 >
-                  <p className="_orange">Web Design</p>
-                </div>
-                <div
-                  className={`categories__theme _green ${
-                    formData.topic === "Research" ? "_active-category" : ""
-                  }`}
-                  onClick={() => {
-                    setFormData({ ...formData, topic: "Research" });
-                  }}
+                  Web Design
+                </Category>
+
+                <Category
+                  type="button"
+                  $topic="Research"
+                  $theme={theme}
+                  $active={formData.topic === "Research"}
+                  onClick={() =>
+                    setFormData({ ...formData, topic: "Research" })
+                  }
                 >
-                  <p className="_green">Research</p>
-                </div>
-                <div
-                  className={`categories__theme _purple ${
-                    formData.topic === "Copywriting" ? "_active-category" : ""
-                  }`}
-                  onClick={() => {
-                    setFormData({ ...formData, topic: "Copywriting" });
-                  }}
+                  Research
+                </Category>
+
+                <Category
+                  type="button"
+                  $theme={theme}
+                  $topic="Copywriting"
+                  $active={formData.topic === "Copywriting"}
+                  onClick={() =>
+                    setFormData({ ...formData, topic: "Copywriting" })
+                  }
                 >
-                  <p className="_purple">Copywriting</p>
-                </div>
-              </div>
-            </div>
+                  Copywriting
+                </Category>
+              </CategoriesList>
+            </Categories>
             {error && <p>{error}</p>}
-            <button
+            <PopNewCardSubmit
               type="submit"
               form="formNewCard"
-              className="form-new__create _hover01"
               id="btnCreate"
               disabled={isSending}
             >
               Создать задачу
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+            </PopNewCardSubmit>
+          </PopNewCardContent>
+        </PopNewCardBlock>
+      </PopNewCardContainer>
+    </PopNewCardWrapper>
   );
 };
 

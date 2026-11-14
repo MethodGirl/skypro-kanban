@@ -34,9 +34,14 @@ export const Cards = styled.div`
 
   @media screen and (max-width: 1200px) {
     & {
+      scrollbar-width: none;
       width: 100%;
       display: flex;
       overflow-y: auto;
     }
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 `;

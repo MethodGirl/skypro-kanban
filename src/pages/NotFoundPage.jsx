@@ -1,10 +1,17 @@
+import {
+  NotFoundWrapper,
+  NotFoundTitle,
+  NotFoundText,
+  HomeLink,
+} from "../components/NotFoundPage/NotFoundPage.styled";
+
 const NotFoundPage = () => {
   return (
-    <div>
-      <h1>404</h1>
-      <p>Страница не найдена</p>
-      <a href="/">Вернуться на главную</a>
-    </div>
+    <NotFoundWrapper>
+      <NotFoundTitle>404</NotFoundTitle>
+      <NotFoundText>Страница не найдена</NotFoundText>
+      <HomeLink to="/">Вернуться на главную</HomeLink>
+    </NotFoundWrapper>
   );
 };
 

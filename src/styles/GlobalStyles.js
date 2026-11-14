@@ -24,7 +24,7 @@ const GlobalStyles = createGlobalStyle`
     color: #000000;
     background-color: #EAEEF6;
     margin: 0;
-    padding: 0
+    padding: 0;
   }
 
   a {
@@ -45,7 +45,6 @@ const GlobalStyles = createGlobalStyle`
   ul,
   ol {
     list-style: none;
-  }
   }
 `;
 

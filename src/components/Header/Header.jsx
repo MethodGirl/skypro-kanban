@@ -1,6 +1,6 @@
 import lightLogo from "../../../public/logo.png";
 import darkLogo from "../../../public/logo_dark.png";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Header as HeaderWrapper,
   Container,
@@ -13,7 +13,6 @@ import {
   UserButton,
 } from "./Header.styled.js";
 import { Hover03 } from "../../styles/Common.styled.js";
-import ExitPage from "../../pages/ExitPage.jsx";
 import {
   PopUserSetMail,
   PopUserSetName,
@@ -26,10 +25,31 @@ import { useTheme } from "../../context/theme/useTheme.js";
 
 const Header = ({ token }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isExitOpen, setIsExitOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const { toggleTheme, theme } = useTheme();
   const navigate = useNavigate();
+
+  const userButtonRef = useRef(null);
+  const popUserSetRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        !userButtonRef.current?.contains(event.target) &&
+        !popUserSetRef.current?.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   const user = sessionStorage.getItem("userInfo");
   const userObj = JSON.parse(user);
@@ -40,7 +60,10 @@ const Header = ({ token }) => {
         <HeaderBlock>
           <LogoLight>
             <Link to="/">
-              <img src={lightLogo} alt="На главную" />
+              <img
+                src={theme === "light" ? lightLogo : darkLogo}
+                alt="На главную"
+              />
             </Link>
           </LogoLight>
 
@@ -56,15 +79,23 @@ const Header = ({ token }) => {
             >
               Создать новую задачу
             </CreateTaskButton>
-            <UserButton $theme={theme} onClick={() => setIsOpen(!isOpen)}>
+            <UserButton
+              ref={userButtonRef}
+              $theme={theme}
+              onClick={() => setIsOpen(!isOpen)}
+            >
               <a>{userObj.name}</a>
             </UserButton>
             {isOpen && (
-              <HeaderPopUserSet $theme={theme} id="user-set-target">
+              <HeaderPopUserSet
+                ref={popUserSetRef}
+                $theme={theme}
+                id="user-set-target"
+              >
                 <PopUserSetName $theme={theme}>{userObj.name}</PopUserSetName>
                 <PopUserSetMail>{userObj.login}</PopUserSetMail>
                 <PopUserSetTheme $theme={theme}>
-                  <p >Темная тема</p>
+                  <p>Темная тема</p>
                   <input
                     type="checkbox"
                     className="checkbox"
@@ -76,7 +107,6 @@ const Header = ({ token }) => {
                 <Hover03
                   type="button"
                   onClick={() => {
-                    setIsExitOpen(true);
                     navigate("/exit");
                   }}
                 >
@@ -90,7 +120,6 @@ const Header = ({ token }) => {
       {isCreateOpen && (
         <PopNewCard onClose={() => setIsCreateOpen(false)} token={token} />
       )}
-      {isExitOpen && <ExitPage />}
     </HeaderWrapper>
   );
 };

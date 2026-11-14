@@ -3,8 +3,10 @@ import { Hover01 } from "../../styles/Common.styled";
 
 export const Wrapper = styled.div`
   width: 100%;
-  height: 100%;
-  background-color: #eaeef6;
+  min-height: 100vh;
+  background-color: ${({ $theme }) => {
+    return $theme === "light" ? "#eaeef6" : "#151419";
+  }};
 `;
 
 export const ContainerSignIn = styled.div`
@@ -12,6 +14,11 @@ export const ContainerSignIn = styled.div`
   width: 100vw;
   min-height: 100vh;
   margin: 0 auto;
+
+  @media screen and (max-width: 375px) {
+    & {
+      background-color: none
+  }
 `;
 
 export const Modal = styled.div`
@@ -23,23 +30,19 @@ export const Modal = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  @media screen and (max-width: 375px) {
-    & {
-      background-color: #ffffff;
-    }
-  }
 `;
 
 export const ModalBlock = styled.div`
   display: block;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: ${({ $theme }) =>
+    $theme === "light" ? "#ffffff" : "#20202C"};
   max-width: 368px;
   width: 100%;
   padding: 50px 60px;
   border-radius: 10px;
-  border: 0.7px solid #d4dbe5;
+  border: ${({ $theme }) =>
+    $theme === "light" ? " 0.7px solid #d4dbe5" : " 0.7px solid #4E5566"};
   box-shadow: 0px 4px 67px -12px rgba(0, 0, 0, 0.13);
 
   @media screen and (max-width: 375px) {
@@ -50,6 +53,7 @@ export const ModalBlock = styled.div`
       border-radius: none;
       border: none;
       box-shadow: none;
+      background-color: transparent;
     }
   }
 `;
@@ -62,6 +66,7 @@ export const ModalTtl = styled.div`
     line-height: 30px;
     letter-spacing: -0.6px;
     margin-bottom: 20px;
+    color: ${({ $theme }) => ($theme === "light" ? "#000" : "#fff")};
   }
 `;
 
@@ -81,18 +86,32 @@ export const ModalInput = styled.input`
   width: 100%;
   min-width: 100%;
   border-radius: 8px;
-  border: 0.7px solid rgba(148, 166, 190, 0.4);
   outline: none;
   padding: 10px 8px;
   margin-bottom: 7px;
 
-  &::-moz-placeholder {
-    font-family: "Roboto", sans-serif;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 21px;
-    letter-spacing: -0.28px;
-    color: #94a6be;
+  -webkit-appearance: none;
+  appearance: none;
+
+  background-color: ${({ $theme }) =>
+    $theme === "light" ? "#ffffff" : "#20202C"};
+
+  border: ${({ $error }) =>
+    $error ? "1px solid #F84D4D" : "0.7px solid rgba(148, 166, 190, 0.4)"};
+
+  color: ${({ $theme }) => ($theme === "light" ? "#000000" : "#94a6be")};
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px
+      ${({ $theme }) => ($theme === "light" ? "#ffffff" : "#20202C")} inset !important;
+
+    -webkit-text-fill-color: ${({ $theme }) =>
+      $theme === "light" ? "#000000" : "#94a6be"};
+
+    transition: background-color 9999s ease-in-out 0s;
   }
 
   &::placeholder {
@@ -103,12 +122,6 @@ export const ModalInput = styled.input`
     letter-spacing: -0.28px;
     color: #94a6be;
   }
-
-  ${({ $error }) =>
-    $error &&
-    `
-  border: 1px solid #F84D4D;
-  `}
 `;
 
 export const ModalBtnEnter = styled(Hover01)`

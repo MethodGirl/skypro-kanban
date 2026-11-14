@@ -2,9 +2,6 @@ import styled, { css } from "styled-components";
 
 export const CardsItem = styled.div`
   padding: 5px;
-  animation-name: card-animation;
-  animation-duration: 500ms;
-  animation-timing-function: linear;
 `;
 
 export const CardsCard = styled.div`
@@ -20,18 +17,16 @@ export const CardsCard = styled.div`
   padding: 15px 13px 19px;
 
   @media screen and (max-width: 1200px) {
-    & {
-      width: 220px;
-      height: 130px;
-      background-color: ${({ $theme }) =>
-        $theme === "dark" ? "#20202C" : "#FFFFFF"};
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: stretch;
-      padding: 15px 13px 19px;
-    }
+    width: 220px;
+    height: 130px;
+    background-color: ${({ $theme }) =>
+      $theme === "dark" ? "#20202C" : "#FFFFFF"};
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: stretch;
+    padding: 15px 13px 19px;
   }
 `;
 
@@ -45,6 +40,8 @@ export const CardGroup = styled.div`
 `;
 
 export const CardTheme = styled.div`
+  filter: ${({ $isLoading }) => ($isLoading ? "blur(4px)" : "blur(0)")};
+
   ${({ $topic, $theme }) => {
     switch ($topic) {
       case "Research":
@@ -109,6 +106,9 @@ export const CardContent = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
+
+  filter: ${({ $isLoading }) => ($isLoading ? "blur(4px)" : "blur(0)")};
+  transition: filter 0.4s ease;
 `;
 
 export const CardDate = styled.div`

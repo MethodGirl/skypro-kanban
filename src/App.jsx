@@ -15,18 +15,15 @@ function App() {
       <GlobalStyles />
 
       <Routes>
-        <Route element={<PrivateRoute/>}>
+        <Route element={<PrivateRoute />}>
           <Route path="/" element={<BoardPage />}>
             <Route path="card/:id" element={<CardPage />} />
+            <Route path="exit" element={<ExitPage />} />
           </Route>
-          <Route path="/exit" element={<ExitPage/>} />
         </Route>
 
-        <Route path="/login" element={<LoginPage  />} />
-        <Route
-          path="/register"
-          element={<RegisterPage  />}
-        />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>

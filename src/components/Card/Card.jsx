@@ -9,10 +9,20 @@ import {
   CardDate,
   CardTitle,
 } from "./Card.styled.js";
+import { useSortable } from "@dnd-kit/react/sortable";
 
 const Card = (props) => {
-  const { topic, title, date, onClick } = props;
-  const {theme} = useTheme()
+  const { topic, title, date, onClick, isLoading, id, index, group } = props;
+  const { theme } = useTheme();
+
+  const { ref, isDragging } = useSortable({
+    id,
+    index,
+    group,
+    type: "task",
+    accept: "task",
+    disabled: isLoading,
+  });
 
   const formattedDate = new Date(date).toLocaleDateString("ru-RU", {
     day: "2-digit",
@@ -21,15 +31,20 @@ const Card = (props) => {
   });
 
   return (
-    <CardsItem  onClick={onClick}>
+    <CardsItem
+      ref={ref}
+      onClick={isLoading ? undefined : onClick}
+      $isDragging={isDragging}
+    >
       <CardsCard $theme={theme}>
         <CardGroup>
-          <CardTheme $theme={theme} $topic={topic}>
+          <CardTheme $isLoading={isLoading} $theme={theme} $topic={topic}>
             <p>{topic}</p>
           </CardTheme>
 
           <CardButton
             type="button"
+            disabled={isLoading}
             onClick={(event) => {
               event.stopPropagation();
               onClick();
@@ -41,7 +56,7 @@ const Card = (props) => {
           </CardButton>
         </CardGroup>
 
-        <CardContent >
+        <CardContent $isLoading={isLoading}>
           <CardTitle $theme={theme}>{title}</CardTitle>
 
           <CardDate>
