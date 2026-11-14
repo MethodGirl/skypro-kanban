@@ -8,7 +8,7 @@ Kanban — это доска, на которой можно создавать 
 
 ## 🌸 Демонстрация проекта
 
-![Kanban Demo](./src/assets/kanban-demo.gif)
+![Kanban Demo](https://github.com/MethodGirl/skypro-kanban/blob/hw1/src/assets/kanban-demo.gif?raw=true)
 
 ## ✨ Возможности
 
