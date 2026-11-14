@@ -8,7 +8,7 @@ Kanban — это доска, на которой можно создавать 
 
 ## 🌸 Демонстрация проекта
 
-![Kanban Demo](./assets/kanban-demo.gif)
+![Kanban Demo](./src/assets/kanban-demo.gif)
 
 ## ✨ Возможности
 
