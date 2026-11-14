@@ -9,7 +9,7 @@ export async function getUsersList() {
         "Content-Type": "",
       },
     });
-        console.log(data.data.users)
+       
     return data.data.users;
 
   } catch (error) {
@@ -26,6 +26,7 @@ export async function signIn(userData) {
         "Content-Type": "",
       },
     });
+    console.log(data.data.user)
     return data.data.user;
   } catch (error) {
     throw new Error(error.response?.data?.error || error.message, {

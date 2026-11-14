@@ -1,7 +1,10 @@
+import { useTheme } from "../../context/theme/useTheme.js";
 import {Wrapper as OuterWrapper} from "./Wrapper.styled.js"
 
 const Wrapper = ({ children }) => {
-  return <OuterWrapper>{children}</OuterWrapper>;
+  const {theme} = useTheme()
+
+  return <OuterWrapper $theme={theme}>{children}</OuterWrapper>;
 };
 
 

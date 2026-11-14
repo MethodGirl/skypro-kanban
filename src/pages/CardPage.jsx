@@ -4,8 +4,7 @@ import { getTaskId } from "../services/api";
 import { useEffect, useState } from "react";
 
 const CardPage = () => {
-  
-  const { token, getTasks } = useOutletContext();
+  const { token } = useOutletContext();
   const [task, setTask] = useState(null);
 
   const { id } = useParams();
@@ -18,7 +17,7 @@ const CardPage = () => {
     loadTask();
   }, [id, token]);
 
-  return <PopBrowse task={task} token={token} onTaskUpdated={getTasks} />;
+  return <PopBrowse task={task} token={token} />;
 };
 
 export default CardPage;

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Hover01, Hover03 } from "../../styles/Common.styled";
 
 export const PopExit = styled.div`
-  display: block;
+  display: ${({ $state }) => ($state === "open" ? "block" : "none")};
   width: 100%;
   height: 100%;
   min-width: 320px;
@@ -22,18 +22,20 @@ export const PopExitContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.4);
+  background: ${({ $theme }) =>
+    $theme === "light" ? "rgba(0, 0, 0, 0.4)" : "rgba(0, 0, 0, 0.83)"};
 `;
 
 export const PopExitBlock = styled.div`
   display: block;
   margin: 0 auto;
-  background-color: #ffffff;
+  background: ${({ $theme }) => ($theme === "light" ? "#ffffff" : "#20202C")};
   max-width: 370px;
   width: 100%;
   padding: 50px 60px;
   border-radius: 10px;
-  border: 0.7px solid #d4dbe5;
+  border: ${({ $theme }) =>
+    $theme === "light" ? "0.7px solid #d4dbe5" : "0.7px solid #4E5566"};
   box-shadow: 0px 4px 67px -12px rgba(0, 0, 0, 0.13);
 
   @media only screen and (max-width: 375px) {
@@ -51,6 +53,7 @@ export const PopExitTtl = styled.div`
     line-height: 30px;
     letter-spacing: -0.4px;
     margin-bottom: 20px;
+    color: ${({ $theme }) => ($theme === "light" ? "#000000" : "#FFFFFF")};
   }
 `;
 
@@ -68,9 +71,8 @@ export const PopExitYes = styled(Hover01)`
   line-height: 21px;
   font-weight: 500;
   letter-spacing: -0.14px;
-  color: #ffffff;
+  color: ${({ $theme }) => ($theme === "light" ? "#FFFFFF" : "#000000")};
   margin-right: 10px;
-
 
   @media only screen and (max-width: 375px) {
     & {
@@ -87,7 +89,11 @@ export const PopExitNo = styled(Hover03)`
   height: 30px;
   background-color: transparent;
   border-radius: 4px;
-  border: 0.7px solid var(--palette-navy-60, #565eef);
+  border: ${({ $theme }) =>
+    $theme === "light"
+      ? "0.7px solid var(--palette-navy-60, #565eef)"
+      : "0.7px solid  #FFFFFF"};
+
   outline: none;
   display: flex;
   align-items: center;
@@ -96,8 +102,7 @@ export const PopExitNo = styled(Hover03)`
   line-height: 21px;
   font-weight: 500;
   letter-spacing: -0.14px;
-  color: #565EEF;
-
+  color: ${({ $theme }) => ($theme === "light" ? "#565eef" : "#FFFFFF")};
 
   @media only screen and (max-width: 375px) {
     & {

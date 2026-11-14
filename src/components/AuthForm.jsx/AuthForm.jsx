@@ -15,9 +15,14 @@ import { signIn, signUp } from "../../services/auth.js";
 import { ModalBtnSignupEnt } from "../SignUp/SignUp.styled.js";
 import { Link, useNavigate } from "react-router-dom";
 import { ErrorEl } from "./Error.styled.js";
+import { useAuth } from "../../context/auth/useAuth.js";
+import { useTheme } from "../../context/theme/useTheme.js";
 
-const AuthForm = ({ isLogin, setIsAuth }) => {
+
+const AuthForm = ({ isLogin }) => {
   const navigate = useNavigate();
+  const { setIsAuth } = useAuth();
+  const {theme} = useTheme();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -34,6 +39,7 @@ const AuthForm = ({ isLogin, setIsAuth }) => {
   const [error, setError] = useState("");
 
   const validateForm = () => {
+    console.log("Пароль:", JSON.stringify(formData.password));
     const newErrors = { name: "", password: "", login: "" };
     let isValid = true;
 
@@ -77,6 +83,7 @@ const AuthForm = ({ isLogin, setIsAuth }) => {
     }
 
     setErrors(newErrors);
+    console.log("Ошибки формы:", newErrors);
     return isValid;
   };
 
@@ -120,16 +127,17 @@ const AuthForm = ({ isLogin, setIsAuth }) => {
   };
 
   return (
-    <AuthWrapper>
-      <ContainerSignIn>
+    <AuthWrapper $theme={theme}>
+      <ContainerSignIn $theme={theme}>
         <Modal>
-          <ModalBlock>
-            <ModalTtl>
+          <ModalBlock $theme={theme}>
+            <ModalTtl $theme={theme}>
               <h2>{isLogin ? "Вход" : "Регистрация"}</h2>
             </ModalTtl>
             <ModalFormLogin onSubmit={handleSubmit}>
               {!isLogin && (
                 <ModalInput
+                  $theme={theme}
                   $error={errors.name || undefined}
                   type="text"
                   name="name"
@@ -140,6 +148,7 @@ const AuthForm = ({ isLogin, setIsAuth }) => {
                 />
               )}
               <ModalInput
+                $theme={theme}
                 $error={errors.login || undefined}
                 type="text"
                 name="login"
@@ -149,6 +158,7 @@ const AuthForm = ({ isLogin, setIsAuth }) => {
                 onChange={handleChange}
               />
               <ModalInput
+                $theme={theme}
                 $error={errors.password || undefined}
                 type="password"
                 name="password"
@@ -159,11 +169,18 @@ const AuthForm = ({ isLogin, setIsAuth }) => {
               />
               <ErrorEl>{error}</ErrorEl>
               {isLogin ? (
-                <ModalBtnEnter type="submit" id="btnEnter"  $error={errors.login || errors.password}>
+                <ModalBtnEnter
+                  type="submit"
+                  id="btnEnter"
+                  $error={errors.login || errors.password}
+                >
                   Войти
                 </ModalBtnEnter>
               ) : (
-                <ModalBtnSignupEnt id="SignUpEnter" $error={errors.name || errors.login || errors.password}>
+                <ModalBtnSignupEnt
+                  id="SignUpEnter"
+                  $error={errors.name || errors.login || errors.password}
+                >
                   Зарегистрироваться
                 </ModalBtnSignupEnt>
               )}

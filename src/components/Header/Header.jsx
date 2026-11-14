@@ -1,6 +1,6 @@
 import lightLogo from "../../../public/logo.png";
 import darkLogo from "../../../public/logo_dark.png";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Header as HeaderWrapper,
   Container,
@@ -13,7 +13,6 @@ import {
   UserButton,
 } from "./Header.styled.js";
 import { Hover03 } from "../../styles/Common.styled.js";
-import ExitPage from "../../pages/ExitPage.jsx";
 import {
   PopUserSetMail,
   PopUserSetName,
@@ -22,20 +21,49 @@ import {
 import { useNavigate } from "react-router-dom";
 import PopNewCard from "../PopNewCard/PopNewCard.jsx";
 import { Link } from "react-router-dom";
+import { useTheme } from "../../context/theme/useTheme.js";
 
-const Header = ({ setIsAuth, onTaskAdded, token }) => {
+const Header = ({ token }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isExitOpen, setIsExitOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const { toggleTheme, theme } = useTheme();
   const navigate = useNavigate();
 
+  const userButtonRef = useRef(null);
+  const popUserSetRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        !userButtonRef.current?.contains(event.target) &&
+        !popUserSetRef.current?.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
+  const user = sessionStorage.getItem("userInfo");
+  const userObj = JSON.parse(user);
+
   return (
-    <HeaderWrapper>
+    <HeaderWrapper $theme={theme}>
       <Container>
         <HeaderBlock>
           <LogoLight>
             <Link to="/">
-              <img src={lightLogo} alt="На главную" />
+              <img
+                src={theme === "light" ? lightLogo : darkLogo}
+                alt="На главную"
+              />
             </Link>
           </LogoLight>
 
@@ -51,21 +79,34 @@ const Header = ({ setIsAuth, onTaskAdded, token }) => {
             >
               Создать новую задачу
             </CreateTaskButton>
-            <UserButton onClick={() => setIsOpen(!isOpen)}>
-              <a>Ivan Ivanov</a>
+            <UserButton
+              ref={userButtonRef}
+              $theme={theme}
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <a>{userObj.name}</a>
             </UserButton>
             {isOpen && (
-              <HeaderPopUserSet id="user-set-target">
-                <PopUserSetName> Ivan Ivanov</PopUserSetName>
-                <PopUserSetMail>ivan.ivanov@gmail.com</PopUserSetMail>
-                <PopUserSetTheme>
+              <HeaderPopUserSet
+                ref={popUserSetRef}
+                $theme={theme}
+                id="user-set-target"
+              >
+                <PopUserSetName $theme={theme}>{userObj.name}</PopUserSetName>
+                <PopUserSetMail>{userObj.login}</PopUserSetMail>
+                <PopUserSetTheme $theme={theme}>
                   <p>Темная тема</p>
-                  <input type="checkbox" className="checkbox" name="checkbox" />
+                  <input
+                    type="checkbox"
+                    className="checkbox"
+                    name="checkbox"
+                    onChange={toggleTheme}
+                    checked={theme === "light" ? false : true}
+                  />
                 </PopUserSetTheme>
                 <Hover03
                   type="button"
                   onClick={() => {
-                    setIsExitOpen(true);
                     navigate("/exit");
                   }}
                 >
@@ -77,13 +118,8 @@ const Header = ({ setIsAuth, onTaskAdded, token }) => {
         </HeaderBlock>
       </Container>
       {isCreateOpen && (
-        <PopNewCard
-          onClose={() => setIsCreateOpen(false)}
-          onTaskAdded={onTaskAdded}
-          token={token}
-        />
+        <PopNewCard onClose={() => setIsCreateOpen(false)} token={token} />
       )}
-      {isExitOpen && <ExitPage setIsAuth={setIsAuth} />}
     </HeaderWrapper>
   );
 };

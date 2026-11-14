@@ -1,3 +1,7 @@
+
+import { useState } from "react";
+import { useTheme } from "../../context/theme/useTheme";
+
 import {
   Calendar as CalendarWrapper,
   CalendarTtl,
@@ -14,35 +18,76 @@ import {
   NavActions,
   NavAction,
 } from "./Calendar.styled";
-import { useState } from "react";
 
-const Calendar = ({ isCreating, date, onDateChange, isEditable  }) => {
-  const formattedDate = date
-    ? new Date(date).toLocaleDateString("ru-RU", {
+const Calendar = ({ isCreating, date, onDateChange, isEditable }) => {
+  const { theme } = useTheme();
+
+  const canEditDate = Boolean(isCreating || isEditable);
+
+  const today = new Date();
+
+  const parsedDate = date ? new Date(date) : null;
+
+  const isValidDate =
+    parsedDate && !Number.isNaN(parsedDate.getTime());
+
+  const selectedDate = isValidDate ? parsedDate : null;
+
+
+  const [currentMonth, setCurrentMonth] = useState(() => {
+    const initialDate = isValidDate ? parsedDate : today;
+
+    return new Date(
+      initialDate.getFullYear(),
+      initialDate.getMonth(),
+      1,
+    );
+  });
+
+
+  const [previousDate, setPreviousDate] = useState(date);
+
+  if (date !== previousDate) {
+    setPreviousDate(date);
+
+    const newDate = date ? new Date(date) : null;
+
+    if (newDate && !Number.isNaN(newDate.getTime())) {
+      setCurrentMonth(
+        new Date(newDate.getFullYear(), newDate.getMonth(), 1),
+      );
+    }
+  }
+
+  const formattedDate = selectedDate
+    ? selectedDate.toLocaleDateString("ru-RU", {
         day: "2-digit",
         month: "2-digit",
         year: "2-digit",
       })
     : "";
 
-  const today = new Date();
-
-  const [currentMonth, setCurrentMonth] = useState(
-    new Date(today.getFullYear(), today.getMonth(), 1),
-  );
-
-  const [selectedDate, setSelectedDate] = useState(today);
-  const [isDateSelected, setIsDateSelected] = useState(false);
-
   const handlePrevMonth = () => {
+    if (!canEditDate) return;
+
     setCurrentMonth(
-      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1),
+      new Date(
+        currentMonth.getFullYear(),
+        currentMonth.getMonth() - 1,
+        1,
+      ),
     );
   };
 
   const handleNextMonth = () => {
+    if (!canEditDate) return;
+
     setCurrentMonth(
-      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1),
+      new Date(
+        currentMonth.getFullYear(),
+        currentMonth.getMonth() + 1,
+        1,
+      ),
     );
   };
 
@@ -53,45 +98,51 @@ const Calendar = ({ isCreating, date, onDateChange, isEditable  }) => {
 
   const firstDay = new Date(year, month, 1).getDay();
 
+ 
   const startDay = firstDay === 0 ? 6 : firstDay - 1;
 
-  const days = Array.from({ length: daysInMonth }, (_, index) => index + 1);
+  const days = Array.from(
+    { length: daysInMonth },
+    (_, index) => index + 1,
+  );
 
   const emptyDays = Array(startDay).fill(null);
-  const calendarDays = emptyDays.concat(days);
-
-  const allCalendarDays = calendarDays;
+  const allCalendarDays = emptyDays.concat(days);
 
   const handleSelectDate = (day) => {
+    if (!canEditDate) return;
+
     const newDate = new Date(year, month, day);
 
-    setSelectedDate(newDate);
-    setIsDateSelected(true);
     onDateChange?.(newDate.toISOString());
   };
 
-  const selectedDateFormatted = selectedDate.toLocaleDateString("ru-RU", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "2-digit",
-  });
+  const selectedDateFormatted = selectedDate
+    ? selectedDate.toLocaleDateString("ru-RU", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit",
+      })
+    : "";
 
   return (
-    <CalendarWrapper>
+    <CalendarWrapper $theme={theme}>
       <CalendarTtl>Даты</CalendarTtl>
+
       <CalendarBlock>
         <CalendarNav>
           <CalendarMonth>
-            {" "}
             {currentMonth.toLocaleDateString("ru-RU", {
               month: "long",
               year: "numeric",
             })}
           </CalendarMonth>
+
           <NavActions>
             <NavAction
               data-action="prev"
               type="button"
+              disabled={!canEditDate}
               onClick={handlePrevMonth}
             >
               <svg
@@ -107,6 +158,7 @@ const Calendar = ({ isCreating, date, onDateChange, isEditable  }) => {
             <NavAction
               data-action="next"
               type="button"
+              disabled={!canEditDate}
               onClick={handleNextMonth}
             >
               <svg
@@ -120,6 +172,7 @@ const Calendar = ({ isCreating, date, onDateChange, isEditable  }) => {
             </NavAction>
           </NavActions>
         </CalendarNav>
+
         <CalendarContent>
           <CalendarDaysNames>
             <CalendarDayName>пн</CalendarDayName>
@@ -130,6 +183,7 @@ const Calendar = ({ isCreating, date, onDateChange, isEditable  }) => {
             <CalendarDayName $weekend>сб</CalendarDayName>
             <CalendarDayName $weekend>вс</CalendarDayName>
           </CalendarDaysNames>
+
           <CalendarCells>
             {allCalendarDays.map((day, index) =>
               day === null ? (
@@ -138,12 +192,22 @@ const Calendar = ({ isCreating, date, onDateChange, isEditable  }) => {
                 <CalendarCell
                   key={index}
                   $activeday={
+                    selectedDate !== null &&
                     selectedDate.getDate() === day &&
                     selectedDate.getMonth() === month &&
                     selectedDate.getFullYear() === year
                   }
                   $cellday
-                  onClick={() => handleSelectDate(day)}
+                  aria-disabled={!canEditDate}
+                  onClick={
+                    canEditDate
+                      ? () => handleSelectDate(day)
+                      : undefined
+                  }
+                  style={{
+                    cursor: canEditDate ? "pointer" : "default",
+                    pointerEvents: canEditDate ? "auto" : "none",
+                  }}
                 >
                   {day}
                 </CalendarCell>
@@ -151,10 +215,11 @@ const Calendar = ({ isCreating, date, onDateChange, isEditable  }) => {
             )}
           </CalendarCells>
         </CalendarContent>
+
         <CalendarPeriod>
           <CalendarP>
-            {isCreating || isEditable  ? (
-              isDateSelected ? (
+            {canEditDate ? (
+              selectedDate ? (
                 <>
                   Срок исполнения: <span>{selectedDateFormatted}</span>
                 </>
